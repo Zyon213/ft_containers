@@ -1,10 +1,10 @@
-#ifndef REVERSE_VECTOR_ITERATOR_HPP
-#define REVERSE_VECTOR_ITERATOR_HPP
+#ifndef REVERSE_ITERATOR_HPP
+#define REVERSE_ITERATOR_HPP
 
 namespace ft
 {
 	template <typename T, bool B>
-	class reverse_vector_iterator
+	class reverse_iterator
 	{
 		public:
 			typedef long int										difference_type;
@@ -21,16 +21,16 @@ namespace ft
 		
 		public:
 				// Default constructor
-				reverse_vector_iterator(valPtr val = 0) : _val(val) {}
+				reverse_iterator(valPtr val = 0) : _val(val) {}
 				
 				// coppy constructor
-				reverse_vector_iterator(const reverse_vector_iterator< T, false>& vec)
+				reverse_iterator(const reverse_iterator< T, false>& vec)
 				{
 					_val = vec.getValPtr();
 				}
 
 				// assigment operator constructor
-				vector_iterato& operator=(const reverse_vector_iterator vec)
+				vector_iterato& operator=(const reverse_iterator vec)
 				{
 					if (this != vec)
 						_val = vec._val;
@@ -39,7 +39,7 @@ namespace ft
 
 				// Default destructor
 
-				~reverse_vector_iterator() {}
+				~reverse_iterator() {}
 
 				iterator
 
@@ -60,90 +60,90 @@ namespace ft
 				pointer operator->() const { return _val; }
 
 				// increment	
-				reverse_vector_iterator& operator++() 
+				reverse_iterator& operator++() 
 				{
 					--_val;
 					return *this;
 				}
 				
 				//decrement
-				reverse_vector_iterator& operator--() 
+				reverse_iterator& operator--() 
 				{
 					++_val;
 					return *this;
 				}
 
 				// post increment
-				reverse_vector_iterator operator++(int) 
+				reverse_iterator operator++(int) 
 				{
-					reverse_vector_iterator temp(*this);
+					reverse_iterator temp(*this);
 					--(*this);
 					return res;
 				}
 
 				// post decrement
-				reverse_vector_iterator operator--(int) 
+				reverse_iterator operator--(int) 
 				{
-					reverse_vector_iterator temp(*this);
+					reverse_iterator temp(*this);
 					++(*this);
 					return res;
 				}
 
 				// add on it
 
-				reverse_vector_iterator& operator+=(difference_type n)
+				reverse_iterator& operator+=(difference_type n)
 				{
 					_val -= n;
 					return *this;
 				}
 
-				reverse_vector_iterator& operator-=(difference_type n)
+				reverse_iterator& operator-=(difference_type n)
 				{
 					_val += n;
 					return *this;
 				}
 
-				reverse_vector_iterator operator[](difference_type n) const
+				reverse_iterator operator[](difference_type n) const
 				{
 					return _val[n];
 				}
 
-				reverse_vector_iterator operator+(difference_type n) const
+				reverse_iterator operator+(difference_type n) const
 				{
-					return reverse_vector_iterator(_val - n);
+					return reverse_iterator(_val - n);
 				}
 
-				reverse_vector_iterator operator-(difference_type n) const
+				reverse_iterator operator-(difference_type n) const
 				{
-					return reverse_vector_iterator(_val + n);
+					return reverse_iterator(_val + n);
 				}
 
-				bool operator==(const reverse_vector_iterator& vec) const
+				bool operator==(const reverse_iterator& vec) const
 				{
 					return vec._val == _val;
 				}
 
-				bool operator!=(const reverse_vector_iterator& vec) const
+				bool operator!=(const reverse_iterator& vec) const
 				{
 					return vec._val != _val;
 				}
 				
-				bool operator<(const reverse_vector_iterator& vec) const
+				bool operator<(const reverse_iterator& vec) const
 				{
 					return vec._val > _val;
 				}
 
-				bool operator<=(const reverse_vector_iterator& vec) const
+				bool operator<=(const reverse_iterator& vec) const
 				{
 					return vec._val >= _val;
 				}
 
-				bool operator>(const reverse_vector_iterator& vec) const
+				bool operator>(const reverse_iterator& vec) const
 				{
 					return vec._val < _val;
 				}
 
-				bool operator>=(const reverse_vector_iterator& vec) const
+				bool operator>=(const reverse_iterator& vec) const
 				{
 					return vec._val <= _val;
 				}
