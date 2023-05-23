@@ -138,6 +138,39 @@ namespace ft
 
 			const_reverse_iterator crend() { return const_reverse_iterator(_vector - 1); }
 
+			/********************** CAPACITY **********************************************/
+			
+			size_type size() const { return _size; }
+
+			// uses the max_size function of allocate returns the maximum number of 
+			// elements that the vector can hold.
+
+			size_type max_size() const { return _allocate.max_size(); }
+
+			void resize(size_type n, value_type val = value_type())
+			{
+				if (n > _capacity)
+					resize_vector(n);
+				if (n > _size)
+					push_back(val);
+				if (n < _size)
+					pop_back();
+			}
+
+
+		private:
+			void resize_vector(size_type newSize)
+			{
+				pointer temp = _allocator.allocate(newSize)
+
+				for (size_type i = 0; i < _size; i++)
+					_allocate.construct(&temp[i], _vector[i]);
+
+				this->~vector();
+				_capacity = newSize;
+				_vector = temp;
+			}
+
 		private:
 			pointer							_vector;
 			size_type						_size;

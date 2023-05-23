@@ -74,7 +74,7 @@ namespace ft
 				{
 					vector_iterator temp(*this);
 					++(*this);
-					return res;
+					return temp;
 				}
 
 				// post decrement
@@ -82,7 +82,7 @@ namespace ft
 				{
 					vector_iterator temp(*this);
 					--(*this);
-					return res;
+					return temp;
 				}
 
 				// add on it
