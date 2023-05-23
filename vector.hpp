@@ -10,6 +10,7 @@
 */
 #include "is_integral.hpp"
 #include "vector_iterator.hpp"
+#include "reverse_vector_iterator.hpp"
 #include <iostream>
 /* 
 	memory header is part of the dynamic memory management library
@@ -43,6 +44,8 @@ namespace ft
 			typedef ft::vector_iterator<T, false>		iterator;
 			typedef ft::vector_iterator<T, true>		const_iterator;
 
+			typedef ft::reverse_vector_iterator<T, false>		reverse_iterator;
+			typedef ft::reverse_vector_iterator<T, true>		const_reverse_iterator;
 			/* 			
 			creates an empty vector constructor with no elements, the explicit 
 			keyword prevent the constructor from being used to implicitly convert
@@ -119,21 +122,21 @@ namespace ft
 
 			/********************** ITERATORS **********************************************/
 
-			iterator begin() { return _vector; }
+			iterator begin() { return iterator(_vector); }
 			
-			iterator end() { return _vector + _size; }
+			iterator end() { return iterator(_vector + _size); }
 
-			// iterator rbegin() { return _vector + (_size - 1);}
+			reverse_iterator rbegin() { return reverse_iterator(_vector + (_size - 1));}
 
-			// iterator rend() { return _vector - 1; }
+			reverse_iterator rend() { return reverse_iterator(_vector - 1); }
 			
-			const_iterator cbegin() const { return _vector; }
+			const_iterator cbegin() const { return const_iterator(_vector); }
 
-			const_iterator cend() const { return _vector + _size; }
+			const_iterator cend() const { return const_iterator(_vector + _size); }
 
-			// const_iterator crbegin() const { return _vector + (_size - 1);}
+			const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size - 1));}
 
-			// const_iterator rend() const { return _vector - 1; }
+			const_reverse_iterator crend() { return const_reverse_iterator(_vector - 1); }
 
 		private:
 			pointer							_vector;
