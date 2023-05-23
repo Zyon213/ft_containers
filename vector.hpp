@@ -9,6 +9,7 @@
 	storage duration. 
 */
 #include "is_integral.hpp"
+#include "vector_iterator.hpp"
 #include <iostream>
 /* 
 	memory header is part of the dynamic memory management library
@@ -39,11 +40,17 @@ namespace ft
 			// a signed integral type to represent pointer subtraction.
 			typedef allocator_type::difference_type		diffence_type;
 
+			typedef ft::vector_iterator<T, false>		iterator;
+			typedef ft::vector_iterator<T, true>		const_iterator;
+
 			/* 			
 			creates an empty vector constructor with no elements, the explicit 
 			keyword prevent the constructor from being used to implicitly convert
 			from other types of std::vector.
 			 */
+			
+			/********************** MEMBER FUNCTIONS **********************************************/
+		
 			explicit vector(const allocator_type& alloc = allocator_type(())) :
 			  _size(0), _capacity(0), _allocator(alloc)
 			{
@@ -105,8 +112,29 @@ namespace ft
 
 			~vector()
 			{
-				for ()
+				for (iterator it = begin(); it != end(); ++it)
+					_allocator.destroy((*it));
+				_allocator.deallocate(_vector, _capacity);
 			}
+
+			/********************** ITERATORS **********************************************/
+
+			iterator begin() { return _vector; }
+			
+			iterator end() { return _vector + _size; }
+
+			// iterator rbegin() { return _vector + (_size - 1);}
+
+			// iterator rend() { return _vector - 1; }
+			
+			const_iterator cbegin() const { return _vector; }
+
+			const_iterator cend() const { return _vector + _size; }
+
+			// const_iterator crbegin() const { return _vector + (_size - 1);}
+
+			// const_iterator rend() const { return _vector - 1; }
+
 		private:
 			pointer							_vector;
 			size_type						_size;
