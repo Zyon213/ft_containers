@@ -1,8 +1,11 @@
 #ifndef VECTOR_ITERATOR_HPP
 #define VECTOR_ITERATOR_HPP
 
+#include "iterator_traits.hpp"
+
 namespace ft
 {
+/* 	
 	template <typename T, bool B>
 	class vector_iterator
 	{
@@ -15,6 +18,17 @@ namespace ft
 			typedef typename  chooseConst<B, T&, const T&>::type	reference;
 			typedef typename  chooseConst<B, T*, const T*>::type	pointer;
 			typedef T*												valPtr;
+	*/
+	template <typename T>
+	class vector_iterator : public ft::iterator_trait<std::random_access_iterator_tag, T>
+	{
+		public:
+			typedef ft::iterator<std::random_access_iterator_tag, T> 	traits_type;
+			typedef typename traits_type::value_type 					value_type;
+			typedef typename traits_type::pointer 						pointer;
+			typedef typename traits_type::reference 					reference;
+			typedef typename traits_type::difference_type 				difference_type;
+			typedef typename traits_type::iterator_category 			iterator_category;
 
 		private:
 				valPtr		_val;
@@ -69,7 +83,9 @@ namespace ft
 					return *this;
 				}
 
-				// post increment
+				// post increment create copy of this and increment 
+				// this but return temp, next time you call this 
+				// it will be incremented.
 				vector_iterator operator++(int) 
 				{
 					vector_iterator temp(*this);
@@ -77,7 +93,9 @@ namespace ft
 					return temp;
 				}
 
-				// post decrement
+				// post decrement create copy of this and decrement
+				// this but return temp, next time you call this 
+				// it will be decremented.
 				vector_iterator operator--(int) 
 				{
 					vector_iterator temp(*this);
