@@ -42,13 +42,13 @@ namespace ft
 	// iterator_triats template provides information about the iterators
 
 	template <class Iterator>
-		class iterator_traits
+	struct iterator_traits
 		{
-			typedef Iterator::difference_type			difference_type;
-			typedef Iterator::value_type				value_type;
-			typedef Iterator::pointer					pointer;
-			typedef Iterator::reference					reference;
-			typedef Iterator::iterator_category			iterator_category;
+			typedef typename Iterator::difference_type			difference_type;
+			typedef typename Iterator::value_type				value_type;
+			typedef typename Iterator::pointer					pointer;
+			typedef typename Iterator::reference					reference;
+			typedef typename Iterator::iterator_category			iterator_category;
 		};	
 
 	/* 	
@@ -57,7 +57,7 @@ namespace ft
 		the pointer
 	 */
 	template <class T>	
-		class iterator_traits<T*>	
+	struct iterator_traits<T*>	
 		{	
 			typedef std::ptrdiff_t						difference_type;
 			typedef T									value_type;
@@ -67,7 +67,7 @@ namespace ft
 		};
 	// specialization for constant pointer types
 	template <class T>	
-		class iterator_traits<T*>	
+	struct iterator_traits<T*>	
 		{	
 			typedef std::ptrdiff_t						difference_type;
 			typedef T									value_type;

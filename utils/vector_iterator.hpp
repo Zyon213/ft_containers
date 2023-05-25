@@ -19,8 +19,8 @@ namespace ft
 			typedef typename  chooseConst<B, T*, const T*>::type	pointer;
 			typedef T*												valPtr;
 	*/
-	template <typename T>
-	class vector_iterator : public ft::iterator_trait<std::random_access_iterator_tag, T>
+	template <class T>
+	class vector_iterator : public ft::iterator<std::random_access_iterator_tag, T>
 	{
 		public:
 			typedef ft::iterator<std::random_access_iterator_tag, T> 	traits_type;
@@ -31,7 +31,7 @@ namespace ft
 			typedef typename traits_type::iterator_category 			iterator_category;
 
 		private:
-				valPtr		_val;
+			pointer		_val;
 		
 		public:
 				// Default constructor

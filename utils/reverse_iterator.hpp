@@ -1,10 +1,12 @@
 #ifndef REVERSE_ITERATOR_HPP
 #define REVERSE_ITERATOR_HPP
 
+#include "iterator_traits.hpp"
+
 namespace ft
 {
-	template <typename T, bool B>
-	class reverse_iterator
+	template <class Iterator>
+	class reverse_iterator : public ft::iterat
 	{
 		public:
 			typedef long int										difference_type;
@@ -41,7 +43,6 @@ namespace ft
 
 				~reverse_iterator() {}
 
-				iterator
 
 				// getter val return _val
 				valPtr getValPtr() const
@@ -78,7 +79,7 @@ namespace ft
 				{
 					reverse_iterator temp(*this);
 					--(*this);
-					return res;
+					return temp;
 				}
 
 				// post decrement
@@ -86,7 +87,7 @@ namespace ft
 				{
 					reverse_iterator temp(*this);
 					++(*this);
-					return res;
+					return temp;
 				}
 
 				// add on it

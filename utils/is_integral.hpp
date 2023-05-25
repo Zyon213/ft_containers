@@ -13,7 +13,7 @@ namespace ft
 	struct enable_if {};
 
 	template<class T>
-	struct enable_if<true, T> {typdef T type; };
+	struct enable_if<true, T> {typedef T type; };
 
 	template <typename>
 	struct is_integral { static const bool value = false; };
@@ -39,9 +39,6 @@ namespace ft
 	template <>
 	struct is_integral<unsigned short> { static const bool value = true; };
 	
-	template <>
-	struct is_integral<bool> { static const bool value = true; };
-
 	template <>
 	struct is_integral<int> { static const bool value = true; };
 
