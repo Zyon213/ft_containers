@@ -5,20 +5,7 @@
 
 namespace ft
 {
-/* 	
-	template <typename T, bool B>
-	class vector_iterator
-	{
-		public:
-			typedef long int										difference_type;
-			typedef T												value_type;
-			typedef size_t											size_type;
 
-			typedef std::random_access_iterator_tag 				iterator_category;
-			typedef typename  chooseConst<B, T&, const T&>::type	reference;
-			typedef typename  chooseConst<B, T*, const T*>::type	pointer;
-			typedef T*												valPtr;
-	*/
 	template <class T>
 	class vector_iterator : public ft::iterator<std::random_access_iterator_tag, T>
 	{
@@ -35,16 +22,17 @@ namespace ft
 		
 		public:
 				// Default constructor
-				vector_iterator(valPtr val = 0) : _val(val) {}
+				vector_iterator() : _val() {}
+
+				// Default constructor
+				vector_iterator(pointer val) : _val(val) {}
 				
 				// coppy constructor
-				vector_iterator(const vector_iterator< T, false>& vec)
-				{
-					_val = vec.getValPtr();
-				}
+				template <class C>
+				vector_iterator(const vector_iterator<C> &vec) : _val(vec.base()){}
 
 				// assigment operator constructor
-				vector_iterato& operator=(const vector_iterator vec)
+				vector_iterator &operator=(const vector_iterator &vec)
 				{
 					if (this != vec)
 						_val = vec._val;
@@ -54,9 +42,14 @@ namespace ft
 				// Default destructor
 
 				~vector_iterator() {}
-
+				
+				pointer base() const
+				{
+					pointer temp(_val);
+					return _val;
+				}
 				// getter val return _val
-				valPtr getValPtr() const
+				pointer getValPtr() const
 				{
 					return _val;
 				}

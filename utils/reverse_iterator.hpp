@@ -6,36 +6,38 @@
 namespace ft
 {
 	template <class Iterator>
-	class reverse_iterator : public ft::iterat
+	class reverse_iterator : public ft::iterator<typename ft::iterator_traits<Iterator>::iterator_category,
+												typename ft::iterator_traits<Iterator>::value_type, 
+												typename ft::iterator_traits<Iterator>::difference_type, 
+												typename ft::iterator_traits<Iterator>::pointer, 
+												typename ft::iterator_traits<Iterator>::reference>
+
 	{
 		public:
-			typedef long int										difference_type;
-			typedef T												value_type;
-			typedef size_t											size_type;
-
-			typedef std::random_access_iterator_tag 				iterator_category;
-			typedef typename  chooseConst<B, T&, const T&>::type	reference;
-			typedef typename  chooseConst<B, T*, const T*>::type	pointer;
-			typedef T*												valPtr;
+			typedef Iterator										iterator_type;
+			typedef ft::iterator_traits<iterator_type> 			traits_types;					
+			typedef typename traits_types::pointer						pointer;									
+			typedef typename traits_types::reference						reference;									
+			typedef typename traits_types::difference_type				difference_type;					
 
 		private:
-				valPtr		_val;
+			iterator_type		_val;
 		
 		public:
 				// Default constructor
-				reverse_iterator(valPtr val = 0) : _val(val) {}
+				reverse_iterator() : _val() {}
 				
 				// coppy constructor
-				reverse_iterator(const reverse_iterator< T, false>& vec)
-				{
-					_val = vec.getValPtr();
-				}
+				reverse_iterator(iterator_type v) : _val(v) {}
+
+				template <class T>
+				reverse_iterator(const reverse_iterator<T> &vec) : _val(vec.base()) {}
 
 				// assigment operator constructor
-				vector_iterato& operator=(const reverse_iterator vec)
+				vector_iterator &operator=(const reverse_iterator &vec)
 				{
-					if (this != vec)
-						_val = vec._val;
+					if (this != &vec)
+						_val = vec.base();
 					return *this;
 				}
 
@@ -43,9 +45,13 @@ namespace ft
 
 				~reverse_iterator() {}
 
+				iterator_type base() const
+				{
+					return _val;
+				}
 
 				// getter val return _val
-				valPtr getValPtr() const
+				iterator_type getValPtr() const
 				{
 					return _val;
 				}
@@ -54,8 +60,11 @@ namespace ft
 
 				// deference
 				reference operator*() const 
-				{ 
-					return *_val; }
+				{
+					iterator_type temp(_val);
+
+					return *--temp;
+				}
 
 				//pointer 
 				pointer operator->() const { return _val; }
