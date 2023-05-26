@@ -75,12 +75,12 @@ namespace ft
 
 			// range constructor - constructs a container with as many elements as the range(first, last)
 
-			template <class InputIterator> 
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : 
-			_size(0), _allocator(alloc)
+			template <class Iterator> 
+			vector (Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
+				typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) : 
+			_vector(0), _allocator(alloc), _size(0), _capacity(0)
 			{
-				InputIterator temp(first);
+				Iterator temp(first);
 				while (first != last)
 					_size++;
 				_capacity = _size;
@@ -112,138 +112,143 @@ namespace ft
 					_allocator.construct(_vector + i, *(x._vector + i));
 				return *this;
 			}
-			~vector(){}
-			// ~vector()
-			// {
-			// 	for (iterator it = begin(); it != end(); ++it)
-			// 		_allocator.destroy((*it));
-			// 	_allocator.deallocate(_vector, _capacity);
-			// }
+
+			~vector()
+			{
+				// for (iterator it = begin(); it != end(); ++it)
+				for (size_type i = 0; i < size(); i++ )
+					_allocator.destroy(_vector + i);
+					// _allocator.destroy((*it));
+				_allocator.deallocate(_vector, _capacity);
+			}
 
 		// 	/********************** ITERATORS **********************************************/
 
-		// 	iterator begin() { return iterator(_vector); }
+			iterator begin() { return iterator(_vector); }
 			
-		// 	iterator end() { return iterator(_vector + _size); }
+			iterator end() { return iterator(_vector + _size); }
 
-		// 	reverse_iterator rbegin() { return reverse_iterator(_vector + (_size - 1));}
+			reverse_iterator rbegin() { return reverse_iterator(_vector + (_size - 1));}
 
-		// 	reverse_iterator rend() { return reverse_iterator(_vector - 1); }
+			reverse_iterator rend() { return reverse_iterator(_vector - 1); }
 			
-		// 	const_iterator cbegin() const { return const_iterator(_vector); }
+			const_iterator cbegin() const { return const_iterator(_vector); }
 
-		// 	const_iterator cend() const { return const_iterator(_vector + _size); }
+			const_iterator cend() const { return const_iterator(_vector + _size); }
 
-		// 	const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size - 1));}
+			const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size - 1));}
 
-		// 	const_reverse_iterator crend() { return const_reverse_iterator(_vector - 1); }
+			const_reverse_iterator crend() { return const_reverse_iterator(_vector - 1); }
 
 		// 	/********************** CAPACITY **********************************************/
 			
-		// 	size_type size() const { return _size; }
+			size_type size() const { return _size; }
 
-		// 	// uses the max_size function of allocate returns the maximum number of 
-		// 	// elements that the vector can hold.
+		/* 	
+			uses the max_size function of allocate returns the maximum number of 
+			elements that the vector can hold. 
+		*/
 
-		// 	size_type max_size() const { return _allocate.max_size(); }
+			size_type max_size() const { return _allocator.max_size(); }
 
-		// 	void resize(size_type n, value_type val = value_type())
-		// 	{
-		// 		if (n > _capacity)
-		// 			resize_vector(n);
-		// 		if (n > _size)
-		// 			push_back(val);
-		// 		if (n < _size)
-		// 			pop_back();
-		// 	}
+			// void resize(size_type n, value_type val = value_type())
+			// {
+			// 	if (n > _capacity)
+			// 		resize_vector(n);
+			// 	if (n > _size)
+			// 		push_back(val);
+			// 	if (n < _size)
+			// 		pop_back();
+			// }
 
-		// 	size_type capacity() const { return _capacity; }
+			size_type capacity() const { return _capacity; }
 
-		// 	// checks if the size is empty
-		// 	bool empty() const { return _size == 0;}
+			// checks if the size is empty
+			bool empty() const { return _size == 0;}
 
-		// 	// request a change in capacity if n is greater than vector capacity
-		// 	// the function causes the container to reallocate its storage 
-		// 	// increasing its capacity to n(or greater)
-		// 	// if n is greater than max_size throws length_error exceptions
+			// request a change in capacity if n is greater than vector capacity
+			// the function causes the container to reallocate its storage 
+			// increasing its capacity to n(or greater)
+			// if n is greater than max_size throws length_error exceptions
 
-		// 	void reserve (size_type n)
-		// 	{
-		// 		if (n > _allocate.max_size())
-		// 			throw std::length_error("vector_reserve");
-		// 		if (n > _capacity)
-		// 			resize_vector(n);
-		// 	}
+			void reserve (size_type n)
+			{
+				if (n > _allocator.max_size())
+					throw std::length_error("vector_reserve");
+				if (n > _capacity)
+					resize_vector(n);
+			}
 
-		// 	// request to the container to reduce its capacity to fit its size
-		// 	// but has no effect on size;
+			/* 			
+				request to the container to reduce its capacity to fit its size
+				but has no effect on size;
+ 			*/
+			/********************** ELEMENT ACCESS **********************************************/
 
-		// 	/********************** ELEMENT ACCESS **********************************************/
+			reference operator[](size_type n)
+			{
+				return _vector[n];
+			}
 
-		// 	reference operator[](size_type n)
-		// 	{
-		// 		return _vector[n];
-		// 	}
+			const_reference operator[](size_type n) const
+			{
+				return _vector[n];
+			}
 
-		// 	const_reference operator[](size_type n) const
-		// 	{
-		// 		return _vector[n];
-		// 	}
+			// the difference between at and [] is at first check if n is in
+			// the bound of the elements in the vector (that is size)
+			reference at (size_type n)
+			{
+				if (n > _size)
+					throw std::out_of_range("vector_index");
+				return _vector[n];
+			}
 
-		// 	// the difference between at and [] is at first check if n is in
-		// 	// the bound of the elements in the vector (that is size)
-		// 	reference at (size_type n)
-		// 	{
-		// 		if (n > _size)
-		// 			throw std::out_out_of_range("vector_index");
-		// 		return _vector[n];
-		// 	}
+			const_reference at (size_type n) const
+			{
+				if (n > _size)
+					throw std::out_of_range("vector_index");
+				return _vector[n];
+			}
 
-		// 	const_reference at (size_type n) const
-		// 	{
-		// 		if (n > _size)
-		// 			throw std::out_out_of_range("vector_index");
-		// 		return _vector[n];
-		// 	}
+			// returns reference to the first element in the vector
 
-		// 	// returns reference to the first element in the vector
+			reference front()
+			{
+				return _vector[0];
+			}
 
-		// 	reference front()
-		// 	{
-		// 		return _vector[0];
-		// 	}
-
-		// 	const_reference front() const
-		// 	{
-		// 		return _vector[0];
-		// 	}
+			const_reference front() const
+			{
+				return _vector[0];
+			}
 			
-		// 	// returns the last element of the vector
+			// returns the last element of the vector
 
-		// 	reference back()
-		// 	{
-		// 		return _vector[_size - 1];
-		// 	}
+			reference back()
+			{
+				return _vector[_size - 1];
+			}
 
-		// 	const_reference back() const
-		// 	{
-		// 		return _vector[_size - 1];
-		// 	}
+			const_reference back() const
+			{
+				return _vector[_size - 1];
+			}
 
-		// 	/********************** MODIFIERS **********************************************/
+			/********************** MODIFIERS **********************************************/
 
-		// private:
-		// 	void resize_vector(size_type newSize)
-		// 	{
-		// 		pointer temp = _allocator.allocate(newSize)
+		private:
+			void resize_vector(size_type newSize)
+			{
+				pointer temp = _allocator.allocate(newSize);
 
-		// 		for (size_type i = 0; i < _size; i++)
-		// 			_allocate.construct(&temp[i], _vector[i]);
+				for (size_type i = 0; i < _size; i++)
+					_allocator.construct(&temp[i], _vector[i]);
 
-		// 		this->~vector();
-		// 		_capacity = newSize;
-		// 		_vector = temp;
-		// 	}
+				this->~vector();
+				_capacity = newSize;
+				_vector = temp;
+			}
 
 		private:
 			pointer							_vector;

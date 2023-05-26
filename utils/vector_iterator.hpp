@@ -34,7 +34,7 @@ namespace ft
 				// assigment operator constructor
 				vector_iterator &operator=(const vector_iterator &vec)
 				{
-					if (this != vec)
+					if (this != &vec)
 						_val = vec._val;
 					return *this;
 				}

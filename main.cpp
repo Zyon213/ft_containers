@@ -1,17 +1,10 @@
-#include <vector>
-#include <array>
-#include <iostream>
-#include <typeinfo>
-#include <string>
-#include <type_traits>
-#include "vector.hpp"
-#include "utils/is_integral.hpp"
-
-using namespace ft;
+#include "tester.hpp"
 
 int main()
 {
-	ft::vector<int> vec;
-	ft::vector<int> vec1(1,3);
+	std::cout << "/************** ft_vector ****************/" << std::endl;
+	// is_empty_vector();
+	// range_vector();
+	iterator_vector();
 	return (0);
 }

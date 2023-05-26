@@ -34,7 +34,7 @@ namespace ft
 				reverse_iterator(const reverse_iterator<T> &vec) : _val(vec.base()) {}
 
 				// assigment operator constructor
-				vector_iterator &operator=(const reverse_iterator &vec)
+				reverse_iterator &operator=(const reverse_iterator<Iterator> &vec)
 				{
 					if (this != &vec)
 						_val = vec.base();
