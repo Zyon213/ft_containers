@@ -180,6 +180,15 @@ void access_vector()
 	std::cout << "The back element is " << vec.back() << std::endl;
 }
 
+template <typename T>
+void it_vec(ft::vector<T> vec)
+{
+	typename ft::vector<T>::iterator it = vec.begin();
+	for (; it != vec.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
+
 void assign_vector()
 {
 	std::cout << "Assign vector" << std::endl;
@@ -191,18 +200,34 @@ void assign_vector()
 	for (it = vec.rbegin(); it != vec.rend(); ++it)
 		std::cout << *it << " ";
 	std::cout << std::endl;
+	std::cout << "Assign range vector" << std::endl;
+	ft::vector<int> vec1(6, 89);
+	ft::vector<int>::iterator fit;
+	for (fit = vec1.begin(); fit != vec1.end(); ++fit)
+		std::cout << *fit << " ";
+	std::cout << std::endl;
+	std::cout << "Access push_back" << std::endl;
+	vec1.push_back(53);
+	vec1.push_back(583);
+	it_vec<int>(vec1);
+	std::cout << "Access pop_back" << std::endl;
+	vec1.pop_back();
+	vec1.pop_back();
+	vec1.pop_back();
+	it_vec<int>(vec1);
 }
 
 template <typename T>
-void arr_assign_vector(T myarr[5])
+void arr_assign_vector(T myarr[5], int n)
 {
 
 	std::cout << "Assign template vector" << std::endl;
 	ft::vector<T> vec;
-	vec.assign(myarr, myarr + 6);
+	vec.assign(myarr, myarr + n);
 	typename ft::vector<T>::reverse_iterator it;
 	for (it = vec.rbegin(); it != vec.rend(); ++it)
 		std::cout << *it << " ";
 	std::cout << std::endl;
+
 }
 #endif

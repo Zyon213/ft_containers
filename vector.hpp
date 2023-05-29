@@ -259,6 +259,36 @@ namespace ft
 				_size = i;
 			}
 
+			void assign(size_type n, const value_type& val)
+			{
+				// clear();
+				if (n > _capacity)
+				{
+					_allocator.deallocate(_vector, _capacity);
+					_vector = _allocator.allocate(n);
+				}
+				size_type i = 0;
+				for (; i < n; i++)
+					_allocator.construct(_vector + i, val);
+				_size = n;
+			}
+
+			void push_back(const value_type& val)
+			{
+				if (_size + 1 > _capacity)
+					resize_vector(!_capacity ? 1 : _capacity * 2);
+				_allocator.construct(_vector + _size, val);
+				++_size;
+			}
+
+			void pop_back()
+			{
+				if (_size)
+				{
+					_allocator.destroy(_vector + (_size - 1));
+					_size--;
+				}
+			}
 		private:
 			void resize_vector(size_type newSize)
 			{
