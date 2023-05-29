@@ -37,6 +37,7 @@ unsigned char
 template <typename T>
 void empty_vector()
 {
+	std::cout << "vector empty constructor" << std::endl;
 	{	
 		T t;
 		std::vector<T> vec;
@@ -79,13 +80,9 @@ void is_empty_vector()
 	empty_vector<unsigned char>();
 }
 
-void ft_vector()
-{
-
-}
-
 void range_vector()
 {
+	std::cout << "vector range constructor" << std::endl;
 	{
 		std::vector<int> vec;
 		std::vector<int> vec1(4,3);
@@ -106,31 +103,106 @@ void range_vector()
 
 void iterator_vector()
 {
-	// {		
-	// 	std::vector<int> vec(5, 8);
-	// 	std::vector<int> vec1(vec.begin(), vec.end());
-	// 	std::vector<int>::iterator it;
-	// 	for (it = vec1.begin(); it != vec1.end(); ++it)
-	// 		std::cout << *it << " ";
-	// 	std::cout << std::endl;
-	// }
-	{		
-		ft::vector<int> vec(5, 8);
-		if (vec.empty())
-			std::cout << "range empty" << std::endl;
-		else
-			std::cout << "range not empty" << std::endl;
+	std::cout << "vector iterator constructor" << std::endl;
 
-		ft::vector<int> vec1(vec.begin(), vec.end());
-		if (vec1.empty())
-			std::cout << "iterator empty" << std::endl;
-		else
-			std::cout << "iterator not empty" << std::endl;
-		// ft::vector<int>::iterator it;
-		// for (it = vec1.begin(); it != vec1.end(); ++it)
-		// 	std::cout << *it << " ";
-		// std::cout << std::endl;
-	}
+	std::vector<int> vec(5, 8);
+	std::vector<int>::iterator it;
+	for (it = vec.begin(); it != vec.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;	
+
+	ft::vector<int> vec1(vec.begin(), vec.end());
+
+	if (vec1.empty())
+		std::cout << "iterator empty" << std::endl;
+	else
+		std::cout << "iterator not empty" << std::endl;
+	ft::vector<int>::iterator it1;
+	for (it1 = vec1.begin(); it1 != vec1.end(); ++it1)
+		std::cout << *it1 << " ";
+	std::cout << std::endl;
+
+	std::cout << "***********************************" << std::endl;
+	int arint[] = {3,4,6,2,3,8,9};
+	ft::vector<int> vec2(arint, arint + (sizeof(arint) / sizeof(int)) );
+	ft::vector<int>::iterator it2;
+
+	for (it2 = vec2.begin(); it2 != vec2.end(); ++it2)
+		std::cout << *it2 << " ";
+	std::cout << std::endl;
 }
 
+void copy_vector()
+{
+	std::cout << "vector copy constructor" << std::endl;
+	ft::vector<int> vec(4, 6);
+	ft::vector<int> vec1(vec);
+
+	ft::vector<int>::iterator it;
+	for (it = vec1.begin(); it != vec1.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
+
+void assignment_vector()
+{
+	std::cout << "vector assignment constructor" << std::endl;
+	ft::vector<int> vec(7, 2);
+	ft::vector<int> vec1;
+
+	vec1 = vec;
+	ft::vector<int>::iterator it;
+	for (it = vec1.begin(); it != vec1.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+}
+
+void reverse_traverse()
+{
+	std::array<int, 7> myarr = {2, 4, 5, 6, 7, 8, 12};
+	std::cout << "reverse iterator" << std::endl;
+	ft::vector<int> vec(myarr.begin(), myarr.end());
+	ft::vector<int>::reverse_iterator rit;
+	for (rit = vec.rbegin(); rit != vec.rend();++rit)
+		std::cout << *rit << " ";
+}
+
+void capacity_vector()
+{
+	std::cout << "vector capacity" << std::endl;
+	ft::vector<int> vec(7, 2);
+	std::cout << "size of vector is : " << vec.size() << std::endl;
+	std::cout << "maximum size of vector is : " << vec.max_size() << std::endl;
+	std::cout << "capacity of vector is : " << vec.capacity() << std::endl;
+	vec.reserve(20);
+	std::cout << "size of vector after reserve is : " << vec.size() << std::endl;
+	std::cout << "maximum size of vector after reverser is : " << vec.max_size() << std::endl;
+	std::cout << "capacity of vector after reserve is : " << vec.capacity() << std::endl;
+}
+
+void access_vector()
+{
+	std::cout << "vector element access" << std::endl;
+	std::array<int, 7> myarr = {3, 44, 5, 32, 87, 23, 98};
+	ft::vector<int> vec(myarr.begin(), myarr.end());
+	std::cout << "************Access element using [] operator***********" << std::endl;
+	std::cout << "The fifth index element is: " << vec[5] << std::endl;
+	std::cout << "The tenth index element is: " << vec[10] << std::endl;
+	std::cout << "************Access element using at ***********" << std::endl;
+	try
+	{
+		std::cout << "The fifth index element is: " << vec.at(5) << std::endl;
+		std::cout << "The tenth index element is: " << vec.at(10) << std::endl;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "Index out of range" << std::endl;
+
+	}
+	std::cout << "The front element is " << vec.front() << std::endl;
+	std::cout << "The back element is " << vec.back() << std::endl;
+
+
+}
 #endif

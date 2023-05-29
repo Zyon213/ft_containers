@@ -81,8 +81,11 @@ namespace ft
 			_vector(0), _allocator(alloc), _size(0), _capacity(0)
 			{
 				Iterator temp(first);
-				while (first != last)
+				while (temp != last)
+				{
+					temp++;
 					_size++;
+				}
 				_capacity = _size;
 				_vector = _allocator.allocate(_capacity);
 				for (int i = 0; first != last; ++i, ++first)
@@ -128,17 +131,17 @@ namespace ft
 			
 			iterator end() { return iterator(_vector + _size); }
 
-			reverse_iterator rbegin() { return reverse_iterator(_vector + (_size - 1));}
+			reverse_iterator rbegin() { return reverse_iterator(_vector + (_size));}
 
-			reverse_iterator rend() { return reverse_iterator(_vector - 1); }
+			reverse_iterator rend() { return reverse_iterator(_vector); }
 			
 			const_iterator cbegin() const { return const_iterator(_vector); }
 
 			const_iterator cend() const { return const_iterator(_vector + _size); }
 
-			const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size - 1));}
+			const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size));}
 
-			const_reverse_iterator crend() { return const_reverse_iterator(_vector - 1); }
+			const_reverse_iterator crend() { return const_reverse_iterator(_vector); }
 
 		// 	/********************** CAPACITY **********************************************/
 			
@@ -199,14 +202,14 @@ namespace ft
 			// the bound of the elements in the vector (that is size)
 			reference at (size_type n)
 			{
-				if (n > _size)
+				if (n >= _size)
 					throw std::out_of_range("vector_index");
 				return _vector[n];
 			}
 
 			const_reference at (size_type n) const
 			{
-				if (n > _size)
+				if (n >= _size)
 					throw std::out_of_range("vector_index");
 				return _vector[n];
 			}
