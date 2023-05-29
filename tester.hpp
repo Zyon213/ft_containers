@@ -10,30 +10,6 @@
 #include <array>
 #include "vector.hpp"
 
-/* 
-int
-float
-double
-char
-wchar_t
-bool
-void
-signed int
-unsigned int
-short
-unsigned short
-long
-unsigned long
-long long
-unsigned long
-long long
-unsigned long long
-long double
-signed char
-unsigned char 
-*/
-
-
 template <typename T>
 void empty_vector()
 {
@@ -202,7 +178,31 @@ void access_vector()
 	}
 	std::cout << "The front element is " << vec.front() << std::endl;
 	std::cout << "The back element is " << vec.back() << std::endl;
+}
 
+void assign_vector()
+{
+	std::cout << "Assign vector" << std::endl;
+	std::array<int, 6> myarr = {4, 6, 32, 76, 12, 88};
 
+	ft::vector<int> vec;
+	vec.assign(myarr.rbegin(), myarr.rend());
+	ft::vector<int>::reverse_iterator it;
+	for (it = vec.rbegin(); it != vec.rend(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
+
+template <typename T>
+void arr_assign_vector(T myarr[5])
+{
+
+	std::cout << "Assign template vector" << std::endl;
+	ft::vector<T> vec;
+	vec.assign(myarr, myarr + 6);
+	typename ft::vector<T>::reverse_iterator it;
+	for (it = vec.rbegin(); it != vec.rend(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
 }
 #endif

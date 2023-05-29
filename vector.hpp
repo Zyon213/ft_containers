@@ -240,6 +240,25 @@ namespace ft
 
 			/********************** MODIFIERS **********************************************/
 
+			template <class InputIterator> 
+			void assign(InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
+
+			{
+				// clear();
+
+				size_type n = static_cast<size_type>(last - first);
+				if (n > _capacity)
+				{
+					_allocator.deallocate(_vector, _capacity);
+					_vector = _allocator.allocate(n);
+				}
+				size_type i = 0;
+				for (; first != last; ++first, ++i)
+					_allocator.construct(_vector + i, *first);
+				_size = i;
+			}
+
 		private:
 			void resize_vector(size_type newSize)
 			{

@@ -10,6 +10,9 @@ int main()
 	// assignment_vector();
 	// reverse_traverse();
 	// capacity_vector();
-	access_vector();
+	// access_vector();
+	assign_vector();
+	int myarr[] = {4, 6, 32, 76, 12, 88};
+	arr_assign_vector<int>(myarr);
 	return (0);
 }
