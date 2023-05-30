@@ -314,7 +314,53 @@ namespace ft
 				_size++;
 				return position;
 			}
+			void insert (iterator position, size_type n, const value_type& val)
+			{
+				difference_type diff = position - begin();
+				size_type pos = static_cast<size_type>(diff) + n;
+				size_type old_pos = static_cast<size_type>(diff) - static_cast<size_type>(pos);
+				size_type new_pos = _size + n;
 
+				if (_size + n > _capacity)
+					resize_vector(!_capacity ? n : _capacity * 2);
+				
+				// create temportary vector
+
+				allocator_type allocator_tmp;
+				pointer vec_temp = allocator_tmp.allocate(_size);
+				for (size_type i = 0; i < _size; i++)
+					allocator_tmp.construct(&vec_temp[i], _vector[i]);
+				
+				// assign values starting from position after the newly inserted elelments
+
+				for (size_type i = pos; i < new_pos; i++)
+				{
+					if (i < _size)
+						_allocator.destroy(&_vector[i]);
+					_allocator.construct(&_vector[i], vec_temp[i + old_pos]);
+				}
+
+				for (size_type i = diff; i < pos; i++)
+				{
+					if (i < _size)
+						_allocator.destroy(&_vector[i]);
+					_allocator.construct(&_vector[i], val);
+				}
+
+				// destroy and dealloate the temporary vector
+				for (size_type i = 0; i < _size; ++i)
+					allocator_tmp.destroy(&vec_temp[i]);
+					
+				allocator_tmp.deallocate(vec_temp, _size);
+				
+				if (diff >= static_cast<difference_type>(_size))
+				{
+					size_type i;
+					for (i = _size; i < diff; i++)
+						_allocator.construct(&_vector[i], _vector[i]);
+				}
+				_size += n;
+			}
 		private:
 			void resize_vector(size_type newSize)
 			{
