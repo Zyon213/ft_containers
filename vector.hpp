@@ -39,7 +39,7 @@ namespace ft
 			typedef typename allocator_type::size_type			size_type;
 
 			// a signed integral type to represent pointer subtraction.
-			typedef typename allocator_type::difference_type		diffence_type;
+			typedef typename allocator_type::difference_type		difference_type;
 
 			typedef ft::vector_iterator<value_type>		iterator;
 			typedef ft::vector_iterator<const value_type>		const_iterator;
@@ -47,9 +47,9 @@ namespace ft
 			typedef ft::reverse_iterator<iterator>		reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 			/* 			
-			creates an empty vector constructor with no elements, the explicit 
-			keyword prevent the constructor from being used to implicitly convert
-			from other types of std::vector.
+				creates an empty vector constructor with no elements, the explicit 
+				keyword prevent the constructor from being used to implicitly convert
+				from other types of std::vector.
 			 */
 			
 			/********************** MEMBER FUNCTIONS **********************************************/
@@ -61,8 +61,8 @@ namespace ft
 			}
 
 			/* 			
-			fill constructor - constructs a container with n elemnets, each
-			is with a copy of val
+				fill constructor - constructs a container with n elemnets, each
+				is with a copy of val
 			 */
 
 			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
@@ -147,10 +147,10 @@ namespace ft
 			
 			size_type size() const { return _size; }
 
-		/* 	
-			uses the max_size function of allocate returns the maximum number of 
-			elements that the vector can hold. 
-		*/
+			/* 	
+				uses the max_size function of allocate returns the maximum number of 
+				elements that the vector can hold. 
+			*/
 
 			size_type max_size() const { return _allocator.max_size(); }
 
@@ -169,10 +169,12 @@ namespace ft
 			// checks if the size is empty
 			bool empty() const { return _size == 0;}
 
-			// request a change in capacity if n is greater than vector capacity
-			// the function causes the container to reallocate its storage 
-			// increasing its capacity to n(or greater)
-			// if n is greater than max_size throws length_error exceptions
+			/* 			
+				request a change in capacity if n is greater than vector capacity
+				the function causes the container to reallocate its storage 
+				increasing its capacity to n(or greater)
+				if n is greater than max_size throws length_error exceptions
+			*/
 
 			void reserve (size_type n)
 			{
@@ -198,8 +200,10 @@ namespace ft
 				return _vector[n];
 			}
 
-			// the difference between at and [] is at first check if n is in
-			// the bound of the elements in the vector (that is size)
+			/* 			
+				the difference between at and [] is at first check if n is in
+				the bound of the elements in the vector (that is size)
+			 */
 			reference at (size_type n)
 			{
 				if (n >= _size)
@@ -290,19 +294,27 @@ namespace ft
 				}
 			}
 
-			iterator insert(iterator postion, const value_type& val)
+			iterator insert(iterator position, const value_type& val)
 			{
-				_vector temp;
-				iterator it;
-				iterator b_it;
-				iterator e_it;
-				if (_size + 1 > _capacity)
-					!_capacity ? 1 : _capacity * 2;
-				temp.__allocator.allocate(_capacity);
-				while (postion.)
-
-
+				difference_type diff = position - begin();
+				if ((_size + 1) > _capacity)
+					resize_vector(!_capacity ? 1 : (_capacity * 2));
+				size_type i;
+				if (static_cast<size_type>(diff) > _size)
+					_allocator.construct(&_vector[_size - 1], val);
+				else
+				{
+					for (i = _size; i > static_cast<size_type>(diff); i--)
+					{
+						_allocator.construct(&_vector[i], _vector[i - 1]);
+						_allocator.destroy(&_vector[i - 1]);
+					}
+					_allocator.construct(&_vector[i], val);
+				}
+				_size++;
+				return position;
 			}
+
 		private:
 			void resize_vector(size_type newSize)
 			{

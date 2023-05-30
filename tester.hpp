@@ -230,4 +230,16 @@ void arr_assign_vector(T myarr[5], int n)
 	std::cout << std::endl;
 
 }
+
+void insert_vector(int val)
+{
+	std::cout << "Insert element to vector" << std::endl;
+	int myarr[5] = {3, 4, 53, 32, 65};
+	ft::vector<int> vec(myarr, myarr + 5);
+	ft::vector<int>::iterator it = vec.begin();
+	it_vec<int>(vec);
+	vec.insert(vec.begin(), val);
+	it_vec<int>(vec);
+}
+
 #endif

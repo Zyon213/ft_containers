@@ -45,7 +45,7 @@ namespace ft
 				
 				pointer base() const
 				{
-					pointer temp(_val);
+					// pointer temp(_val);
 					return _val;
 				}
 				// getter val return _val
@@ -155,6 +155,12 @@ namespace ft
 					return vec._val <= _val;
 				}
 	};
+
+template <class Iterator>
+typename vector_iterator<Iterator>::difference_type
+operator-(const vector_iterator<Iterator> &lhs, const vector_iterator<Iterator> &rhs) {
+	return lhs.base() - rhs.base();
+}
 
 }
 
