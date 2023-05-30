@@ -289,6 +289,20 @@ namespace ft
 					_size--;
 				}
 			}
+
+			iterator insert(iterator postion, const value_type& val)
+			{
+				_vector temp;
+				iterator it;
+				iterator b_it;
+				iterator e_it;
+				if (_size + 1 > _capacity)
+					!_capacity ? 1 : _capacity * 2;
+				temp.__allocator.allocate(_capacity);
+				while (postion.)
+
+
+			}
 		private:
 			void resize_vector(size_type newSize)
 			{
