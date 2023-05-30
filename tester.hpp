@@ -234,14 +234,18 @@ void arr_assign_vector(T myarr[5], int n)
 void insert_vector(int val)
 {
 	std::cout << "Insert single element to vector" << std::endl;
-	int myarr[5] = {3, 4, 53, 32, 65};
+	int myarr[5] = {3, 3,3,3,3};
 	ft::vector<int> vec(myarr, myarr + 5);
 	ft::vector<int>::iterator it;
 	it_vec<int>(vec);
 	vec.insert(vec.begin(), val);
 	it_vec<int>(vec);
 	std::cout << "Insert multiple elements to vector" << std::endl;
-	vec.insert(vec.begin() + 5, 4, 332);
+	vec.insert(vec.begin() + 5, 4, 55);
+	it_vec<int>(vec);
+	std::cout << "Insert range of elements to vector" << std::endl;
+	int myarr1[] = {8,7,7,7,7};
+	vec.insert(vec.begin() + 3, myarr1, myarr1 + 3);
 	it_vec<int>(vec);
 }
 
