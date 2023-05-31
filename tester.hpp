@@ -249,4 +249,30 @@ void insert_vector(int val)
 	it_vec<int>(vec);
 }
 
+void erase_vector(int p)
+{
+	std::cout << "Erase single element to vector" << std::endl;
+	int myarr[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	ft::vector<int> vec(myarr, myarr + 10);
+	it_vec<int>(vec);
+	vec.erase(vec.begin());
+	it_vec<int>(vec);
+	std::cout << "Erase multiple element to vector" << std::endl;
+	vec.erase(vec.begin() + 3, vec.begin() + 6);
+	it_vec<int>(vec);
+}
+
+void clear_vector()
+{
+	std::cout << "Erase single element to vector" << std::endl;
+	int myarr[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	ft::vector<int> vec(myarr, myarr + 10);
+	it_vec<int>(vec);
+	vec.clear();
+	if (vec.empty())
+		std::cout << "Vector cleared" << std::endl;
+	else
+		it_vec<int>(vec);
+
+}
 #endif

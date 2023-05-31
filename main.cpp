@@ -16,6 +16,8 @@ int main()
 	// arr_assign_vector<int>(myarr, 6);
 	// int myarr1[] = {77, 0, 24, 6, 32, 76, 12, 88};
 	// arr_assign_vector<int>(myarr1, 8);
-	insert_vector(89);
+	// insert_vector(89);
+	// erase_vector(2);
+	clear_vector();
 	return (0);
 }

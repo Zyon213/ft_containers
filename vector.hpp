@@ -414,6 +414,59 @@ namespace ft
 				_size += n;
 
 			}
+
+			// erase an element from position
+
+			iterator erase(iterator position)
+			{
+				size_type i = 0;
+				iterator it = this->begin();
+				while (it != position)
+				{
+					++it;
+					i++;
+				}
+				if (position != this->end())
+					_allocator.destroy(&_vector[i]);
+				for (iterator it = position ; it < this->end() - 1; ++it, ++i)
+					this->_allocator.construct(&_vector[i], _vector[i + 1]);
+				--(this->_size);
+				return (position);
+			}
+/* 			iterator erase(iterator position)
+			{
+				if (position != this->end())
+					_allocator.destroy(position.base());
+
+				for (iterator it = position ; it < this->end() - 1; ++it)
+					this->_allocator.construct(it.base(), *(it + 1));
+				--(this->_size);
+				return (position);
+			}
+ */
+			iterator erase(iterator first, iterator last)
+			{
+				while (first != last)
+					erase(--last);
+		
+				return last;
+			}
+
+			// swap two containers exchanging every elements
+
+			void swap(vector& x)
+			{
+				// to be done;
+			}
+
+			// removes all elements from the vector
+
+			void clear()
+			{
+				erase(this->begin(), this->end());
+			}
+
+
 		private:
 			void resize_vector(size_type newSize)
 			{
