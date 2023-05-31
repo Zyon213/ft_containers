@@ -18,6 +18,7 @@ int main()
 	// arr_assign_vector<int>(myarr1, 8);
 	// insert_vector(89);
 	// erase_vector(2);
-	clear_vector();
+	// clear_vector();
+	swap_vector();
 	return (0);
 }

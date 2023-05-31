@@ -249,7 +249,7 @@ namespace ft
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 
 			{
-				// clear();
+				clear();
 
 				size_type n = static_cast<size_type>(last - first);
 				if (n > _capacity)
@@ -265,7 +265,7 @@ namespace ft
 
 			void assign(size_type n, const value_type& val)
 			{
-				// clear();
+				clear();
 				if (n > _capacity)
 				{
 					_allocator.deallocate(_vector, _capacity);
@@ -452,13 +452,6 @@ namespace ft
 				return last;
 			}
 
-			// swap two containers exchanging every elements
-
-			void swap(vector& x)
-			{
-				// to be done;
-			}
-
 			// removes all elements from the vector
 
 			void clear()
@@ -466,7 +459,20 @@ namespace ft
 				erase(this->begin(), this->end());
 			}
 
+			// swap two containers exchanging every elements
 
+			void swap(vector& x)
+			{
+				swap(_vector, x._vector);
+				swap(_size, x._size);
+				swap(_capacity, x._capacity);
+				swap(_allocator, x._allocator);
+			}
+	
+			friend void swap(vector& x, vector &y)
+			{
+				x.swap(y);
+			}
 		private:
 			void resize_vector(size_type newSize)
 			{
@@ -479,6 +485,17 @@ namespace ft
 				_capacity = newSize;
 				_vector = temp;
 			}
+
+			// swap two elements x and y
+			template <typename A>
+			void swap(A& x, A&y)
+			{
+				A tmp;
+				tmp = x;
+				x = y;
+				y = tmp;
+			}
+			
 
 		private:
 			pointer							_vector;

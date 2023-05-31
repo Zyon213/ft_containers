@@ -275,4 +275,20 @@ void clear_vector()
 		it_vec<int>(vec);
 
 }
+
+void swap_vector()
+{
+	std::cout << "Swap element of two vector" << std::endl;
+	int myarr1[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+	int myarr2[10] = {20, 21, 22, 23, 24, 25, 26, 27, 28, 29};
+	ft::vector<int> vec1(myarr1, myarr1 + 10);
+	ft::vector<int> vec2(myarr2, myarr2 + 10);
+	std::cout << "Before swap" << std::endl;
+	it_vec<int>(vec1);
+	it_vec<int>(vec2);
+	std::cout << "After swap" << std::endl;
+	vec1.swap(vec2);
+	it_vec<int>(vec1);
+	it_vec<int>(vec2);
+}
 #endif
