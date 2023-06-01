@@ -11,15 +11,6 @@
 #include "vector.hpp"
 
 template <typename T>
-void it_vec(ft::vector<T> vec)
-{
-	typename ft::vector<T>::iterator it = vec.begin();
-	for (; it != vec.end(); ++it)
-		std::cout << *it << " ";
-	std::cout << std::endl;
-}
-
-template <typename T>
 void empty_vector()
 {
 	std::cout << "vector empty constructor" << std::endl;
@@ -172,7 +163,7 @@ void access_vector()
 	std::array<int, 7> myarr = {3, 44, 5, 32, 87, 23, 98};
 	ft::vector<int> vec(myarr.begin(), myarr.end());
 	std::cout << "************Access element using [] operator***********" << std::endl;
-	std::cout << "The fifth index element is: " << vec[5] << std::endl;
+	// std::cout << "The fifth index element is: " << vec[5] << std::endl;
 	// std::cout << "The tenth index element is: " << vec[10] << std::endl;
 	std::cout << "************Access element using at ***********" << std::endl;
 	try
@@ -187,6 +178,15 @@ void access_vector()
 	}
 	std::cout << "The front element is " << vec.front() << std::endl;
 	std::cout << "The back element is " << vec.back() << std::endl;
+}
+
+template <typename T>
+void it_vec(ft::vector<T> vec)
+{
+	typename ft::vector<T>::iterator it = vec.begin();
+	for (; it != vec.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
 }
 
 void assign_vector()
@@ -217,27 +217,28 @@ void assign_vector()
 	it_vec<int>(vec1);
 }
 
-void arr_assign_vector()
+template <typename T>
+void arr_assign_vector(T myarr[5], int n)
 {
-	int myarr[6] = {4, 6, 32, 76, 12, 88};
+
 	std::cout << "Assign template vector" << std::endl;
-	ft::vector<int> vec;
-	vec.assign(myarr, myarr + 6);
-	typename ft::vector<int>::reverse_iterator it;
+	ft::vector<T> vec;
+	vec.assign(myarr, myarr + n);
+	typename ft::vector<T>::reverse_iterator it;
 	for (it = vec.rbegin(); it != vec.rend(); ++it)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
 }
 
-void insert_vector()
+void insert_vector(int val)
 {
 	std::cout << "Insert single element to vector" << std::endl;
 	int myarr[5] = {3, 3,3,3,3};
 	ft::vector<int> vec(myarr, myarr + 5);
 	ft::vector<int>::iterator it;
 	it_vec<int>(vec);
-	vec.insert(vec.begin(), 5);
+	vec.insert(vec.begin(), val);
 	it_vec<int>(vec);
 	std::cout << "Insert multiple elements to vector" << std::endl;
 	vec.insert(vec.begin() + 5, 4, 55);
@@ -248,7 +249,7 @@ void insert_vector()
 	it_vec<int>(vec);
 }
 
-void erase_vector(int p)
+void erase_vector()
 {
 	std::cout << "Erase single element to vector" << std::endl;
 	int myarr[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

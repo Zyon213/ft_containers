@@ -78,7 +78,7 @@ namespace ft
 			template <class Iterator> 
 			vector (Iterator first, Iterator last, const allocator_type& alloc = allocator_type(),
 				typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) : 
-			_vector(0), _allocator(alloc), _size(0), _capacity(0)
+			_vector(0), _size(0), _capacity(0), _allocator(alloc)
 			{
 				Iterator temp(first);
 				while (temp != last)
@@ -94,7 +94,7 @@ namespace ft
 
 			// copy constructor
 
-			vector (const vector& x):_size(0), _capacity(0), _allocator(x._allocator), _vector(0)
+			vector (const vector& x):_vector(0), _size(0), _capacity(0), _allocator(x._allocator)
 			{
 				*this = x;
 			} 

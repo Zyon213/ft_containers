@@ -249,7 +249,7 @@ void insert_vector(int val)
 	it_vec<int>(vec);
 }
 
-void erase_vector(int p)
+void erase_vector()
 {
 	std::cout << "Erase single element to vector" << std::endl;
 	int myarr[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

@@ -7,15 +7,18 @@ FTNAME = ft_vector
 TNAME = t_vector
 FTTXT = ft_vector.txt
 STDTXT = std_vector.txt
+FLAG = -Wall
+# FLAG11 = -Wall -Wextra -Werror -std=c++98
+
 DF = diff
 RM = rm -f
 
 ft:
-	$(CPP) $(FTFILE) -o $(FTNAME)
+	$(CPP) $(FLAG) $(FTFILE) -o $(FTNAME)
 std:
-	$(CPP) $(STDFILE) -o $(STDNAME)
+	$(CPP) $(FLAG) $(STDFILE) -o $(STDNAME)
 test:
-	$(CPP) $(TEST) -o $(TNAME)
+	$(CPP) $(FLAG) $(TEST) -o $(TNAME)
 
 all: ft std
 compare:
@@ -33,4 +36,4 @@ leakft:
 	valgrind --leak-check=full -s ./$(FTNAME)
 leakstd:
 	valgrind --leak-check=full ./$(STDNAME)
-.phony: clean compare all
+.phony: clean compare all ft std test
