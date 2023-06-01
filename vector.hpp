@@ -94,34 +94,35 @@ namespace ft
 
 			// copy constructor
 
-			vector (const vector& x)
+			vector (const vector& x):_size(0), _capacity(0), _allocator(x._allocator), _vector(0)
 			{
-				_size = x._size;
-				_capacity = x._capacity;
-				_allocator = x._allocator;
-				_vector = _allocator.allocate(_capacity);
 				*this = x;
-
-			}
+			} 
 
 			// assignment operator
+			// vector& operator=(const vector& x)
+			// {
+			// 	_size = x._size;
+			// 	_capacity = x._capacity;
+			// 	_allocator = x._allocator;
+			// 	_vector = _allocator.allocate(_capacity);
+			// 	for (size_type i = 0; i < _size; i++)
+			// 		_allocator.construct(_vector + i, *(x._vector + i));
+			// 	return *this;
+			// }
+
 			vector& operator=(const vector& x)
 			{
-				_size = x._size;
-				_capacity = x._capacity;
-				_allocator = x._allocator;
-				_vector = _allocator.allocate(_capacity);
-				for (size_type i = 0; i < _size; i++)
-					_allocator.construct(_vector + i, *(x._vector + i));
+				this->insert(this->begin(), x.begin(), x.end());
 				return *this;
 			}
 
+
 			~vector()
 			{
-				// for (iterator it = begin(); it != end(); ++it)
-				for (size_type i = 0; i < size(); i++ )
-					_allocator.destroy(_vector + i);
-					// _allocator.destroy((*it));
+				// std::cout << "Destructor called" << std::endl;
+				for (iterator it = begin(); it != end(); ++it)
+					_allocator.destroy(&(*it));
 				_allocator.deallocate(_vector, _capacity);
 			}
 
@@ -135,9 +136,9 @@ namespace ft
 
 			reverse_iterator rend() { return reverse_iterator(_vector); }
 			
-			const_iterator cbegin() const { return const_iterator(_vector); }
+			const_iterator begin() const { return const_iterator(_vector); }
 
-			const_iterator cend() const { return const_iterator(_vector + _size); }
+			const_iterator end() const { return const_iterator(_vector + _size); }
 
 			const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size));}
 
@@ -488,7 +489,7 @@ namespace ft
 
 			// swap two elements x and y
 			template <typename A>
-			void swap(A& x, A&y)
+			void swap(A& x, A& y)
 			{
 				A tmp;
 				tmp = x;
