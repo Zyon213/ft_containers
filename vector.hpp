@@ -11,6 +11,8 @@
 #include "utils/is_integral.hpp"
 #include "utils/vector_iterator.hpp"
 #include "utils/reverse_iterator.hpp"
+#include "utils/lexicographical_compare.hpp"
+#include "utils/swap.hpp"
 #include <iostream>
 /* 
 	memory header is part of the dynamic memory management library
@@ -426,18 +428,15 @@ namespace ft
 
 			// swap two containers exchanging every elements
 
+
 			void swap(vector& x)
 			{
-				swap(_vector, x._vector);
-				swap(_size, x._size);
-				swap(_capacity, x._capacity);
-				swap(_allocator, x._allocator);
+				ft::swap(_vector, x._vector);
+				ft::swap(_size, x._size);
+				ft::swap(_capacity, x._capacity);
+				ft::swap(_allocator, x._allocator);
 			}
-	
-			friend void swap(vector& x, vector &y)
-			{
-				x.swap(y);
-			}
+			
 			/********************** Allocator **********************************************/
 			
 			// returns a copy of the allocator objected associated with the vector
@@ -447,7 +446,9 @@ namespace ft
 				return _allocator;
 			}
 
+
 		private:
+
 			void resize_vector(size_type newSize)
 			{
 				pointer temp = _allocator.allocate(newSize);
@@ -461,15 +462,6 @@ namespace ft
 			}
 
 			// swap two elements x and y
-			template <typename A>
-			void swap(A& x, A& y)
-			{
-				A tmp;
-				tmp = x;
-				x = y;
-				y = tmp;
-			}
-			
 
 		private:
 			pointer							_vector;
@@ -479,6 +471,58 @@ namespace ft
 
 
 	};
+
+				/********************** Non-member function overloads  ****************************/
+
+			template <class T, class Alloc> 
+			bool operator== (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+			{
+				if (lhs.size() != rhs.size())
+					return false;
+				
+				for (size_t i = 0; i < lhs.size(); i++)
+				{
+					if (lhs.at(i) != rhs.at(i))
+						return false;
+				}
+				return true;
+			}
+				
+			template <class T, class Alloc>
+			bool operator!= (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+			{
+				return !(lhs == rhs);
+			}
+
+			template <class T, class Alloc> 
+			bool operator< (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+			{
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+			}
+
+			template <class T, class Alloc>
+			bool operator<= (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+			{
+				return !(lhs > rhs);
+			}
+			
+			template <class T, class Alloc> 
+			bool operator> (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+			{
+				return (lhs > rhs);
+			}
+
+			template <class T, class Alloc>
+			bool operator>= (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+			{
+				return !(lhs < rhs);
+			}
+
+			template <class T, class Alloc>
+			void swap(ft::vector<T, Alloc>& x, ft::vector<T, Alloc>& y)
+			{
+				x.swap(y);
+			}
 }
 
 
