@@ -36,4 +36,6 @@ leakft:
 	valgrind --leak-check=full -s ./$(FTNAME)
 leakstd:
 	valgrind --leak-check=full ./$(STDNAME)
+leaktest:
+	valgrind --leak-check=full ./$(TNAME)
 .phony: clean compare all ft std test

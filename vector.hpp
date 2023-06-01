@@ -57,9 +57,9 @@ namespace ft
 			/********************** MEMBER FUNCTIONS **********************************************/
 		
 			explicit vector(const allocator_type &alloc = allocator_type()) :
-			  _size(0), _capacity(0), _allocator(alloc)
+			  _vector(0), _size(0), _capacity(0), _allocator(alloc)
 			{
-				_vector = _allocator.allocate(_capacity);
+				// _vector = _allocator.allocate(_capacity);
 			}
 
 			/* 			
@@ -68,7 +68,7 @@ namespace ft
 			 */
 
 			explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
-			_size(n), _capacity(n), _allocator(alloc)
+			_vector(0), _size(n), _capacity(n), _allocator(alloc)
 			{
 				_vector = _allocator.allocate(_capacity);
 				for (size_type i = 0; i < _size; i++)
@@ -83,14 +83,15 @@ namespace ft
 			_vector(0), _size(0), _capacity(0), _allocator(alloc)
 			{
 				Iterator temp(first);
+				difference_type diff = 0;
 				while (temp != last)
 				{
+					diff++;
 					temp++;
-					_size++;
 				}
-				_capacity = _size;
+				_size = _capacity = static_cast<size_type>(diff);
 				_vector = _allocator.allocate(_capacity);
-				for (int i = 0; first != last; ++i, ++first)
+				for (size_type i = 0; first != last; ++i, ++first)
 					_allocator.construct(_vector + i, *first);
 			} 
 
@@ -103,17 +104,33 @@ namespace ft
 
 			vector& operator=(const vector& x)
 			{
-				this->insert(this->begin(), x.begin(), x.end());
+				if (!this->empty())
+					this->~vector();
+
+				if (this != &x)
+				{
+					clear();
+					_allocator.deallocate(begin(), _capacity);
+
+					_vector = _allocator.allocate(_capacity);
+					_size = x._size;
+					_capacity = x._capacity;
+					// for (size_type i = 0; i < _size; i++)
+					// 	_allocator.construct(_vector + i, *(x._vector + i));
+					this->insert(this->begin(), x.begin(), x.end());
+				}
 				return *this;
 			}
 
 
 			~vector()
 			{
+
 				// std::cout << "Destructor called" << std::endl;
 				for (iterator it = begin(); it != end(); ++it)
 					_allocator.destroy(&(*it));
 				_allocator.deallocate(_vector, _capacity);
+				_capacity = 0;
 			}
 
 		// 	/********************** ITERATORS **********************************************/
@@ -150,9 +167,15 @@ namespace ft
 				if (n > _capacity)
 					resize_vector(n);
 				if (n > _size)
-					push_back(val);
+				{
+					for (size_type i = _size; i < n; i++)
+						push_back(val);
+				}
 				if (n < _size)
-					pop_back();
+				{
+					for (size_type i = n; _size > i; _size--)
+						pop_back();
+				}
 			}
 
 			size_type capacity() const { return _capacity; }
