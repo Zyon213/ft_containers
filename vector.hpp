@@ -300,22 +300,8 @@ namespace ft
 			iterator insert(iterator position, const value_type& val)
 			{
 				difference_type diff = position - begin();
-				if ((_size + 1) > _capacity)
-					resize_vector(!_capacity ? 1 : (_capacity * 2));
-				size_type i;
-				if (static_cast<size_type>(diff) > _size)
-					_allocator.construct(&_vector[_size - 1], val);
-				else
-				{
-					for (i = _size; i > static_cast<size_type>(diff); i--)
-					{
-						_allocator.construct(&_vector[i], _vector[i - 1]);
-						_allocator.destroy(&_vector[i - 1]);
-					}
-					_allocator.construct(&_vector[i], val);
-				}
-				_size++;
-				return position;
+				insert(position, 1, val);
+				return (&_vector[diff]);
 			}
 
 			// insert a range of elements starting at position

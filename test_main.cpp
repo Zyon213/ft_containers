@@ -36,7 +36,8 @@ class L
 
 int main()
 {
-    ft::vector<L> a;
+    // ft::vector<L> a;
+    std::vector<L> a;
 
     a.insert(a.begin(), L());
     a.insert(a.begin(), 1000 , L());
