@@ -99,18 +99,6 @@ namespace ft
 				*this = x;
 			} 
 
-			// assignment operator
-			// vector& operator=(const vector& x)
-			// {
-			// 	_size = x._size;
-			// 	_capacity = x._capacity;
-			// 	_allocator = x._allocator;
-			// 	_vector = _allocator.allocate(_capacity);
-			// 	for (size_type i = 0; i < _size; i++)
-			// 		_allocator.construct(_vector + i, *(x._vector + i));
-			// 	return *this;
-			// }
-
 			vector& operator=(const vector& x)
 			{
 				this->insert(this->begin(), x.begin(), x.end());
@@ -132,17 +120,17 @@ namespace ft
 			
 			iterator end() { return iterator(_vector + _size); }
 
+			const_iterator begin() const { return const_iterator(_vector); }
+			
+			const_iterator end() const { return const_iterator(_vector + _size); }
+			
 			reverse_iterator rbegin() { return reverse_iterator(_vector + (_size));}
 
-			reverse_iterator rend() { return reverse_iterator(_vector); }
+			reverse_iterator rend() { return reverse_iterator(_vector - 1); }
 			
-			const_iterator begin() const { return const_iterator(_vector); }
+			const_reverse_iterator rbegin() const { return const_reverse_iterator(_vector + (_size));}
 
-			const_iterator end() const { return const_iterator(_vector + _size); }
-
-			const_reverse_iterator crbegin() const { return const_reverse_iterator(_vector + (_size));}
-
-			const_reverse_iterator crend() { return const_reverse_iterator(_vector); }
+			const_reverse_iterator rend() const { return const_reverse_iterator(_vector - 1); }
 
 		// 	/********************** CAPACITY **********************************************/
 			
@@ -155,15 +143,15 @@ namespace ft
 
 			size_type max_size() const { return _allocator.max_size(); }
 
-			// void resize(size_type n, value_type val = value_type())
-			// {
-			// 	if (n > _capacity)
-			// 		resize_vector(n);
-			// 	if (n > _size)
-			// 		push_back(val);
-			// 	if (n < _size)
-			// 		pop_back();
-			// }
+			void resize(size_type n, value_type val = value_type())
+			{
+				if (n > _capacity)
+					resize_vector(n);
+				if (n > _size)
+					push_back(val);
+				if (n < _size)
+					pop_back();
+			}
 
 			size_type capacity() const { return _capacity; }
 
@@ -420,17 +408,7 @@ namespace ft
 				--(this->_size);
 				return (position);
 			}
-/* 			iterator erase(iterator position)
-			{
-				if (position != this->end())
-					_allocator.destroy(position.base());
 
-				for (iterator it = position ; it < this->end() - 1; ++it)
-					this->_allocator.construct(it.base(), *(it + 1));
-				--(this->_size);
-				return (position);
-			}
- */
 			iterator erase(iterator first, iterator last)
 			{
 				while (first != last)
@@ -460,6 +438,15 @@ namespace ft
 			{
 				x.swap(y);
 			}
+			/********************** Allocator **********************************************/
+			
+			// returns a copy of the allocator objected associated with the vector
+
+			allocator_type get_allocator() const
+			{
+				return _allocator;
+			}
+
 		private:
 			void resize_vector(size_type newSize)
 			{
