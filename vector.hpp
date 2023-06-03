@@ -30,24 +30,18 @@ namespace ft
 	class vector
 	{
 		public:
-			typedef T									value_type;
-			typedef	Allocator							allocator_type;
+			typedef T												value_type;
+			typedef	Allocator										allocator_type;
 			typedef typename allocator_type::pointer				pointer;
-			typedef typename allocator_type::reference			reference;
-			typedef typename allocator_type::const_pointer 		const_pointer;
-			typedef typename allocator_type::const_reference 	const_reference;
-
-			// size_t is the size of an object in bytes::size
-			typedef typename allocator_type::size_type			size_type;
-
-			// a signed integral type to represent pointer subtraction.
+			typedef typename allocator_type::reference				reference;
+			typedef typename allocator_type::const_pointer 			const_pointer;
+			typedef typename allocator_type::const_reference 		const_reference;
+			typedef typename allocator_type::size_type				size_type;
 			typedef typename allocator_type::difference_type		difference_type;
-
-			typedef ft::vector_iterator<value_type>		iterator;
-			typedef ft::vector_iterator<const value_type>		const_iterator;
-
-			typedef ft::reverse_iterator<iterator>		reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+			typedef ft::vector_iterator<value_type>					iterator;
+			typedef ft::vector_iterator<const value_type>			const_iterator;
+			typedef ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 			/* 			
 				creates an empty vector constructor with no elements, the explicit 
 				keyword prevent the constructor from being used to implicitly convert
@@ -104,20 +98,20 @@ namespace ft
 
 			vector& operator=(const vector& x)
 			{
-				if (!this->empty())
+				if (!(this->empty()))
 					this->~vector();
 
 				if (this != &x)
 				{
-					clear();
-					_allocator.deallocate(begin(), _capacity);
-
-					_vector = _allocator.allocate(_capacity);
+					// clear();
+					// _allocator.deallocate(_vector, _capacity);
+					_vector = _allocator.allocate(x._capacity);
 					_size = x._size;
 					_capacity = x._capacity;
-					// for (size_type i = 0; i < _size; i++)
-					// 	_allocator.construct(_vector + i, *(x._vector + i));
-					this->insert(this->begin(), x.begin(), x.end());
+					// _allocator = x._allocator;
+					for (size_type i = 0; i < _size; i++)
+						_allocator.construct(_vector + i, *(x._vector + i));
+					// this->insert(this->begin(), x.begin(), x.end());
 				}
 				return *this;
 			}
@@ -136,19 +130,15 @@ namespace ft
 		// 	/********************** ITERATORS **********************************************/
 
 			iterator begin() { return iterator(_vector); }
-			
-			iterator end() { return iterator(_vector + _size); }
-
 			const_iterator begin() const { return const_iterator(_vector); }
 			
+			iterator end() { return iterator(_vector + _size); }
 			const_iterator end() const { return const_iterator(_vector + _size); }
-			
+
 			reverse_iterator rbegin() { return reverse_iterator(_vector + (_size));}
-
-			reverse_iterator rend() { return reverse_iterator(_vector - 1); }
-			
 			const_reverse_iterator rbegin() const { return const_reverse_iterator(_vector + (_size));}
-
+			
+			reverse_iterator rend() { return reverse_iterator(_vector - 1); }
 			const_reverse_iterator rend() const { return const_reverse_iterator(_vector - 1); }
 
 		// 	/********************** CAPACITY **********************************************/
@@ -190,13 +180,34 @@ namespace ft
 				if n is greater than max_size throws length_error exceptions
 			*/
 
-			void reserve (size_type n)
+/* 			void reserve (size_type n)
 			{
 				if (n > _allocator.max_size())
 					throw std::length_error("vector_reserve");
 				if (n > _capacity)
 					resize_vector(n);
-			}
+			} */
+ 
+			void reserve (size_type n)
+			{
+				if (n > _allocator.max_size())
+					throw std::length_error("vector_reserve");
+				else if (_capacity < n)
+				{
+					allocator_type tmp_alloc;
+					pointer tmp_vec = tmp_alloc.allocate(n);
+					size_type tmp_size = _size;
+
+					for (size_type i = 0; i < _size; i++)
+						tmp_alloc.construct(tmp_vec + i, *(_vector + i));
+
+				this->~vector();
+				_vector = tmp_vec;
+				_size = tmp_size;
+				_capacity = n;
+				_allocator = tmp_alloc;
+				}
+			} 
 
 			/* 			
 				request to the container to reduce its capacity to fit its size
@@ -263,7 +274,30 @@ namespace ft
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
 
 			{
-				clear();
+				this->clear();
+				while (first != last)
+				{
+					push_back(*first);
+					++first;
+				}
+
+			}
+
+			void assign(size_type n, const value_type& val)
+			{
+				this->clear();
+				while (n)
+				{
+					push_back(val);
+					--n;
+				}
+			}
+/* 			template <class InputIterator> 
+			void assign(InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
+
+			{
+				// clear();
 
 				size_type n = static_cast<size_type>(last - first);
 				if (n > _capacity)
@@ -279,7 +313,7 @@ namespace ft
 
 			void assign(size_type n, const value_type& val)
 			{
-				clear();
+				// clear();
 				if (n > _capacity)
 				{
 					_allocator.deallocate(_vector, _capacity);
@@ -289,7 +323,7 @@ namespace ft
 				for (; i < n; i++)
 					_allocator.construct(_vector + i, val);
 				_size = n;
-			}
+			} */
 
 			void push_back(const value_type& val)
 			{
@@ -309,111 +343,143 @@ namespace ft
 			}
 
 			// insert an element at a specific position
+ 
+		// 	iterator insert(iterator position, const value_type& val)
+		// 	{
+		// 		if (_size == _capacity)
+		// 		{
+		// 			size_type diff = position - begin();
+		// 			reserve ((_size + 1) * 2);
+		// 			position = begin() + diff;
+		// 		}
+		// 		for (iterator it = end(); it > position; --it)
+		// 			_allocator.construct(it.base(), *(it - 1));
+		// 		_allocator.construct(position.base(), val);
+		// 		++(_size);
+		// 		return (position);
+		// 	}
 
-			iterator insert(iterator position, const value_type& val)
-			{
-				difference_type diff = position - begin();
-				insert(position, 1, val);
-				return (&_vector[diff]);
-			}
-
-			// insert a range of elements starting at position
+		// 	// insert a range of elements starting at position
  		
-			void insert (iterator position, size_type n, const value_type& val)
-			{
-				difference_type diff = position - begin();
-				size_type pos = static_cast<size_type>(diff) + n;
-				size_type old_pos = static_cast<size_type>(diff) - static_cast<size_type>(pos);
-				size_type new_pos = _size + n;
-
-				if (_size + n > _capacity)
-					resize_vector(!_capacity ? n : _capacity * 2);
-				
-				// create temportary vector
-
-				allocator_type allocator_tmp;
-				pointer vec_temp = allocator_tmp.allocate(_size);
-				for (size_type i = 0; i < _size; i++)
-					allocator_tmp.construct(&vec_temp[i], _vector[i]);
-				
-				// assign values starting from position after the newly inserted elelments
-
-				for (size_type i = pos; i < new_pos; i++)
-				{
-					if (i < _size)
-						_allocator.destroy(&_vector[i]);
-					_allocator.construct(&_vector[i], vec_temp[i + old_pos]);
-				}
-				
-				// insert the new elements starting position
-				for (size_type i = diff; i < pos; i++)
-				{
-					if (i < _size)
-						_allocator.destroy(&_vector[i]);
-					_allocator.construct(&_vector[i], val);
-				}
-
-				// destroy and dealloate the temporary vector
-				for (size_type i = 0; i < _size; ++i)
-					allocator_tmp.destroy(&vec_temp[i]);
-					
-				allocator_tmp.deallocate(vec_temp, _size);
-				
-				_size += n;
-			}
+		// 	void insert (iterator position, size_type n, const value_type& val)
+		// 	{
+		// 		for (size_type i = 0; i < n; ++i)
+		// 		{
+		// 			position = insert(position, val);
+		// 			++position;
+		// 		}
+		// 	}
 		
-		// insert a range of elements starting at position
-			template <class InputIterator> 
-			void insert(iterator position, InputIterator first, InputIterator last,
-				typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
-			{
-				difference_type diff = position - begin();
-				difference_type pos = diff;
-
-				size_type n = 0;
-				for (InputIterator it = first; it != last; it++)
-				{
-					pos++;
-					n++;
-				}
-				size_type old_pos = static_cast<size_type>(diff) - static_cast<size_type>(pos);
-				size_type new_pos = _size + n;
-				if (_size + n > _capacity)
-					resize_vector(!_capacity ? n : _capacity * 2);
-				
-				// create temportary vector
-
-				allocator_type allocator_tmp;
-				pointer vec_temp = allocator_tmp.allocate(_size);
-				for (size_type i = 0; i < _size; i++)
-					allocator_tmp.construct(&vec_temp[i], _vector[i]);
-				
-				// assign values starting from position after the newly inserted elelments
-
-				for (size_type i = static_cast<size_type>(pos); i < new_pos; i++)
-				{
-					if (i < _size)
-						_allocator.destroy(&_vector[i]);
-					_allocator.construct(&_vector[i], vec_temp[i + old_pos]);
-				}
-				
-				// insert the new elements starting position
-				for (size_type i = static_cast<size_type>(diff); i < static_cast<size_type>(pos); i++)
-				{
-					if (i < _size)
-						_allocator.destroy(&_vector[i]);
-					_allocator.construct(&_vector[i], *first++);
+		// // insert a range of elements starting at position
+		// 	template <class InputIterator> 
+		// 	void insert(iterator position, InputIterator first, InputIterator last,
+		// 		typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0)
+		// 	{
+		// 		while (first != last)
+		// 		{
+		// 			position = insert(position, *first);
+		// 			++position;
+		// 			++first;
+		// 		}
+		// 	}
+ 
+		iterator insert(iterator position, const value_type &val) {
+			difference_type offset = position - this->begin();
+			if (offset >= 0) {
+				if (!_capacity) {
+					this->reserve(1);
+				} else if (_size == _capacity) {
+					this->reserve(_capacity * 2);
 				}
 
-				// destroy and dealloate the temporary vector
-				for (size_type i = 0; i < _size; ++i)
-					allocator_tmp.destroy(&vec_temp[i]);
-					
-				allocator_tmp.deallocate(vec_temp, _size);
-				
-				_size += n;
-
+				if (static_cast<size_type>(offset) > _size) {
+					_allocator.construct(_vector + _size, *(_vector + _size - 1));
+				} else {
+					for (size_type i = _size; i > static_cast<size_type>(offset); i--) {
+						_allocator.construct(_vector + i, *(_vector + i - 1));
+						_allocator.destroy(_vector + i - 1);
+					}
+					_allocator.construct(_vector + size_type(offset), val);
+				}
 			}
+			_size++;
+			return position;
+		}
+
+		void insert(iterator position, size_type n, const value_type &val) {
+			difference_type offset = position - this->begin();
+			size_type range = static_cast<size_type>(offset) + n,
+			          old_value = static_cast<size_type>(offset) - static_cast<size_type>(range),
+			          new_size = _size + n;
+
+			if (_size + n >= _capacity) {
+				this->reserve(std::max(_capacity * 2, _size + n));
+			}
+
+			allocator_type temp_alloc;
+			pointer temp_vector = temp_alloc.allocate(_size);
+			for (size_type i = 0; i < _size; i++) {
+				temp_alloc.construct(temp_vector + i, *(_vector + i));
+			}
+
+			for (size_type i = range; i < new_size; i++) {
+				if (i < _size)
+					_allocator.destroy(_vector + i);
+				_allocator.construct(_vector + i, *(temp_vector + i + old_value));
+			}
+			for (size_type i = offset; i < range; i++) {
+				if (i < _size)
+					_allocator.destroy(_vector + i);
+				_allocator.construct(_vector + i, val);
+			}
+
+			for (size_type i = 0; i < _size; i++) {
+				temp_alloc.destroy(temp_vector + i);
+			}
+			temp_alloc.deallocate(temp_vector, _size);
+			_size += n;
+		}
+
+		template <class Iterator>
+		void insert(iterator position, Iterator first, Iterator last,
+		            typename ft::enable_if<!ft::is_integral<Iterator>::value, Iterator>::type* = 0) {
+			difference_type offset = position - this->begin(),
+			                range = offset;
+			size_type n = 0;
+			for (Iterator temp = first; temp != last; temp++) {
+				range++;
+				n++;
+			}
+			size_type old_value =static_cast<size_type>(offset) - static_cast<size_type>(range),
+			          new_size = _size + n;
+			if (_size + n >= _capacity) {
+				this->reserve(std::max(_capacity * 2, _size + n));
+			}
+
+			allocator_type temp_alloc;
+			pointer temp_vector = temp_alloc.allocate(_size);
+			for (size_type i = 0; i < _size; i++) {
+				temp_alloc.construct(temp_vector + i, *(_vector + i));
+			}
+
+			for (size_type i = static_cast<size_type>(range); i < new_size; i++) {
+				if (i < _size)
+					_allocator.destroy(_vector + i);
+				_allocator.construct(_vector + i, *(temp_vector + i + old_value));
+			}
+			for (size_type i = static_cast<size_type>(offset); i < static_cast<size_type>(range); i++) {
+				if (i < _size)
+					_allocator.destroy(_vector + i);
+				_allocator.construct(_vector + i, *first++);
+			}
+
+			for (size_type i = 0; i < _size; i++) {
+				temp_alloc.destroy(temp_vector + i);
+			}
+			temp_alloc.deallocate(temp_vector, _size);
+			_size += n;
+		}
+
 
 			// erase an element from position
 

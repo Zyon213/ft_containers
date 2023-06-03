@@ -59,6 +59,8 @@
 		"system_error": "cpp",
 		"tuple": "cpp",
 		"typeinfo": "cpp",
-		"utility": "cpp"
+		"utility": "cpp",
+		"memory_resource": "cpp",
+		"__functional_03": "cpp"
 	}
 }

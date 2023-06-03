@@ -30,6 +30,7 @@ namespace ft
 				// coppy constructor
 				template <class C>
 				vector_iterator(const vector_iterator<C> &vec) : _val(vec.base()){}
+	
 
 				// assigment operator constructor
 				vector_iterator &operator=(const vector_iterator &vec)
@@ -39,38 +40,21 @@ namespace ft
 					return *this;
 				}
 
-				// Default destructor
-
 				~vector_iterator() {}
 				
-				pointer base() const
-				{
-					// pointer temp(_val);
-					return _val;
-				}
-				// getter val return _val
-				pointer getValPtr() const
-				{
-					return _val;
-				}
+				pointer base() const { return _val; }
 
-				// operator overloads
-
-				// deference
 				reference operator*() const { return *_val; }
 
-				//pointer 
 				pointer operator->() const { return _val; }
 
-				// increment	
-				vector_iterator& operator++() 
+				vector_iterator &operator++() 
 				{
 					_val++;
 					return *this;
 				}
 				
-				//decrement
-				vector_iterator& operator--() 
+				vector_iterator &operator--() 
 				{
 					_val--;
 					return *this;
@@ -81,7 +65,7 @@ namespace ft
 				// it will be incremented.
 				vector_iterator operator++(int) 
 				{
-					vector_iterator temp(*this);
+					vector_iterator temp = *this;
 					++(*this);
 					return temp;
 				}
@@ -91,26 +75,26 @@ namespace ft
 				// it will be decremented.
 				vector_iterator operator--(int) 
 				{
-					vector_iterator temp(*this);
+					vector_iterator temp = *this;
 					--(*this);
 					return temp;
 				}
 
 				// add on it
 
-				vector_iterator& operator+=(difference_type n)
+				vector_iterator &operator+=(difference_type n)
 				{
 					_val += n;
 					return *this;
 				}
 
-				vector_iterator& operator-=(difference_type n)
+				vector_iterator &operator-=(difference_type n)
 				{
 					_val -= n;
 					return *this;
 				}
 
-				vector_iterator operator[](difference_type n) const
+				reference operator[](difference_type n) const
 				{
 					return _val[n];
 				}
@@ -124,37 +108,40 @@ namespace ft
 				{
 					return vector_iterator(_val - n);
 				}
-
-				bool operator==(const vector_iterator& vec) const
-				{
-					return vec._val == _val;
-				}
-
-				bool operator!=(const vector_iterator& vec) const
-				{
-					return vec._val != _val;
-				}
-				
-				bool operator<(const vector_iterator& vec) const
-				{
-					return vec._val > _val;
-				}
-
-				bool operator<=(const vector_iterator& vec) const
-				{
-					return vec._val >= _val;
-				}
-
-				bool operator>(const vector_iterator& vec) const
-				{
-					return vec._val < _val;
-				}
-
-				bool operator>=(const vector_iterator& vec) const
-				{
-					return vec._val <= _val;
-				}
+							
 	};
+
+
+template <class Iter1, class Iter2>
+bool operator==(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() == rhs.base();
+}
+
+template <class Iter1, class Iter2>
+bool operator!=(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() != rhs.base();
+}
+
+template <class Iter1, class Iter2>
+bool operator<(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() < rhs.base();
+}
+
+template <class Iter1, class Iter2>
+bool operator<=(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() <= rhs.base();
+}
+
+template <class Iter1, class Iter2>
+bool operator>(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() > rhs.base();
+}
+
+template <class Iter1, class Iter2>
+bool operator>=(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() >= rhs.base();
+}
+
 
 template <class Iterator>
 typename vector_iterator<Iterator>::difference_type
@@ -162,6 +149,17 @@ operator-(const vector_iterator<Iterator> &lhs, const vector_iterator<Iterator> 
 	return lhs.base() - rhs.base();
 }
 
+template <class Iter1, class Iter2>
+typename vector_iterator<Iter1>::difference_type
+operator-(const vector_iterator<Iter1> &lhs, const vector_iterator<Iter2> &rhs) {
+	return lhs.base() - rhs.base();
+}
+
+template <class Iterator>
+vector_iterator<Iterator>
+operator+(typename vector_iterator<Iterator>::difference_type n, const vector_iterator<Iterator> &it) {
+	return vector_iterator<Iterator>(it.base() + n);
+}
 }
 
 #endif
