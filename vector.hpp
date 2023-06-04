@@ -103,15 +103,11 @@ namespace ft
 
 				if (this != &x)
 				{
-					// clear();
-					// _allocator.deallocate(_vector, _capacity);
 					_vector = _allocator.allocate(x._capacity);
 					_size = x._size;
 					_capacity = x._capacity;
-					// _allocator = x._allocator;
 					for (size_type i = 0; i < _size; i++)
 						_allocator.construct(_vector + i, *(x._vector + i));
-					// this->insert(this->begin(), x.begin(), x.end());
 				}
 				return *this;
 			}
@@ -154,20 +150,19 @@ namespace ft
 
 			void resize(size_type n, value_type val = value_type())
 			{
-				if (n > _capacity)
-					resize_vector(n);
-				if (n > _size)
-				{
-					for (size_type i = _size; i < n; i++)
-						push_back(val);
-				}
-				if (n < _size)
-				{
-					for (size_type i = n; _size > i; _size--)
-						pop_back();
-				}
-			}
+				if (n > this->max_size())
+					throw std::length_error("resize error");
+				else if (n > _capacity)
+					this->reserve(std::max(_capacity * 2, n));
 
+				for (size_type i = _size; i < n; i++)
+					_allocator.construct(_vector + i, val);
+
+				for (size_type i = _size; i > n; i--)
+					_allocator.destroy(_vector + i - 1);
+				_size = n;
+			}
+			
 			size_type capacity() const { return _capacity; }
 
 			// checks if the size is empty
@@ -481,7 +476,7 @@ namespace ft
 
 	};
 
-				/********************** Non-member function overloads  ****************************/
+	/********************** Non-member function overloads  ****************************/
 
 template <class T, class Allocator> 
 bool operator==(const ft::vector<T, Allocator> &lhs, const ft::vector<T, Allocator> &rhs)
@@ -533,6 +528,5 @@ void swap(ft::vector<T, Allocator> &x, ft::vector<T, Allocator> &y)
 	x.swap(y);
 }
 }
-
 
 #endif
