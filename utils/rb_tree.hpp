@@ -285,6 +285,8 @@ namespace ft
 				node_allocator  		_alloc;
 				size_type 				_size;
 
+			/********************** MEMBER FUNCTIONS *********************************/
+
 			public:
 				rbtree(const compare_type& comp, const allocator_type& alloc) : _comp(comp), _alloc(alloc), _size(size_type())
 				{
@@ -330,6 +332,126 @@ namespace ft
 					return (*this);
 				}
 
+			/********************** ITERATORS *********************************/
+			
+				iterator begin()
+				{
+					return (iterator(_begin, _nil));
+				}
+
+				const_iterator begin() const
+				{
+					return (const_iterator(_begin, _nil));
+				}
+
+				iterator end()
+				{
+					return (iterator(_end, _nil));
+				}
+
+				const_iterator end() const
+				{
+					return (const_iterator(_end, _nil));
+				}
+
+			/********************** CAPACITY *********************************/
+
+				bool empty () const
+				{
+					return (_size == 0);
+				}
+
+				size_type size() const
+				{
+					return (_size);
+				}
+
+				size_type max_size() const
+				{
+					return (_alloc.max_size());
+				}
+
+			/********************** MODIFIERS *********************************/
+				
+				ft::pair<iterator, bool> insert(const value_type& value)
+				{
+					node_pointer ptr = search_parent(value);
+
+					if (ptr != _end && is_equal(ptr->_value, value, _comp));
+						return (ft::make_pair(iterator(ptr, _nil), false));
+					return (ft::make_pair(iterator(insert_internal(value , ptr), true)));
+				}
+
+				iterator insert(iterator position, const value_type& value)
+				{
+					node_pointer ptr = search_parent(value, position.base());
+
+					if (ptr != _end && is_equal(ptr->_value, value, _comp));
+						return (iterator(ptr, _nil));
+					return (iterator(insert_internal(value , ptr), _nil));
+				}
+
+				template <class InputIterator>
+				void insert(InputIterator first, InputIterator last)
+				{
+					for (; first != last; first++)
+						insert(*first)
+				}
+
+				iterator erase(iterator position)
+				{
+					if (_size == 0)
+						return (iterator(_nil, _nil));
+					
+					iterator tmp(position)
+					++tmp;
+					if (position == begin())
+						_begin = tmp.base();
+					--_size;
+					remove_internal(position.base());
+					delete_node(position.base());
+					return (tmp);
+				}
+
+				size_type erase(const key_type& value)
+				{
+					iterator i(find_internal(value), _nil);
+
+					if (i == end())
+						return (0);
+					if (i == begin())
+					{
+						iterator tmp(i);
+						++tmp;
+						_begin = tmp.base();
+					}
+					--_size;
+					remove_internal(i.base());
+					delete_node(i.base());
+					return (1);
+				}
+
+				void erase (iterator first, iterator last)
+				{
+					for (; first != last;)
+						first = erase(first);
+				}
+
+				void swap(rtree& node)
+				{
+					std::swap(_nil, node._nil);
+					std::swap(_begin, node._begin);
+					std::swap(_end, node._end);
+					std::swap(_comp, node._comp);
+					std::swap(_alloc, node._alloc);
+					std::swap(_size, node._size);
+				}
+
+				void clear (void)
+				{
+					rbtree tmp(_comp, _alloc);
+					swap(tmp);
+				}
 		}
 }
 #endif
