@@ -256,5 +256,80 @@ namespace ft
 			}
 
 		};
+
+		// red-black tree class
+
+		template <typename T, class Key, class Comp, class Allocator>
+		class rbtree
+		{
+			public:
+				typedef T									 						value_type;
+				typedef Key									 						key_type;
+				typedef Comp								 						compare_type;
+				typedef TreeNode<value_type>				 						node_type;			
+				typedef TreeNode<value_type>*				 						node_pointer;			
+				typedef tree_iterator<value_type, node_type> 						iterator;
+				typedef tree_iterator<const value_type, node_type> 					const_iterator;
+				typedef Allocator								   					allocator_type;
+				typedef typename allocator_type::template rebind<node_type>::other 	node_allocator;
+				typedef ft::allocator_traits<node_allocator>  					   	node_traits;
+				typedef std::size_t							  					   	size_type;
+				typedef std::ptrdiff_t  					  					   	difference_type;
+
+			private:
+				node_pointer 			_nil;
+				node_pointer 			_begin;
+				node_pointer 			_end;
+				node_pointer 			_comp;
+				compare_type 			_comp;
+				node_allocator  		_alloc;
+				size_type 				_size;
+
+			public:
+				rbtree(const compare_type& comp, const allocator_type& alloc) : _comp(comp), _alloc(alloc), _size(size_type())
+				{
+					_nil = _alloc.allocate(1);
+					_alloc.construct(_nil, value_type());
+					_nil->_is_black = true;
+					_nil->_parent = _nil;
+					_nil->_left = _nil;
+					_nil->_right = _nil;
+					_end = creae_node(value_type());
+					_end->_is_black = true;
+					_begin = _end;
+				}
+			
+			public:
+				rbtree(const rbtree& node) : _comp(node._comp), _alloc(node._alloc), _size(size_type())
+				{
+					_nil = _alloc.allocate(1);
+					_alloc.construct(_nil, value_type());
+					_nil->_is_black = true;
+					_nil->_parent = _nil;
+					_nil->_left = _nil;
+					_nil->_right = _nil;
+					_end = creae_node(value_type());
+					_end->_is_black = true;
+					_begin = _end;
+					insert(node.begin(), node.end());
+				}
+
+				~rbtree()
+				{
+					delete_node_recursive(_end);
+					delete_node(_nil);
+				}
+
+				rbtree& operator=(const rbtree& node)
+				{
+					if (this != &node)
+					{
+						rbtree tmp(node);
+						swap(tmp);
+					}
+					return (*this);
+				}
+
+		}
 }
 #endif
