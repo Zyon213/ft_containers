@@ -286,7 +286,9 @@ namespace ft
 				size_type 				_size;
 
 			/********************** MEMBER FUNCTIONS *********************************/
-
+			
+			// Default constructor with comp and alloc argument , set left, right and parent to NIL
+			// and allocate 1 size, since it is the root it is black 
 			public:
 				rbtree(const compare_type& comp, const allocator_type& alloc) : _comp(comp), _alloc(alloc), _size(size_type())
 				{
@@ -301,6 +303,7 @@ namespace ft
 					_begin = _end;
 				}
 			
+			// Default copy constructor
 			public:
 				rbtree(const rbtree& node) : _comp(node._comp), _alloc(node._alloc), _size(size_type())
 				{
@@ -322,6 +325,8 @@ namespace ft
 					delete_node(_nil);
 				}
 
+				// Assignment constructor create temp rbtree and swap it to this
+				// with out changing node
 				rbtree& operator=(const rbtree& node)
 				{
 					if (this != &node)
@@ -333,7 +338,8 @@ namespace ft
 				}
 
 			/********************** ITERATORS *********************************/
-			
+
+				// return begin and end elements
 				iterator begin()
 				{
 					return (iterator(_begin, _nil));
@@ -356,6 +362,9 @@ namespace ft
 
 			/********************** CAPACITY *********************************/
 
+				// empty check if the map is empty, size return the size of map
+				// and max_size returns the maximum size of the map
+
 				bool empty () const
 				{
 					return (_size == 0);
@@ -373,6 +382,11 @@ namespace ft
 
 			/********************** MODIFIERS *********************************/
 				
+				/*
+					insert the pair key and value
+					insert the value in the position
+					insert starting first to last
+				*/
 				ft::pair<iterator, bool> insert(const value_type& value)
 				{
 					node_pointer ptr = search_parent(value);
@@ -398,6 +412,11 @@ namespace ft
 						insert(*first)
 				}
 
+				/*
+					erase the value on the iterator position
+					erase based on the value
+					erase elements from first to last
+				*/
 				iterator erase(iterator position)
 				{
 					if (_size == 0)
@@ -437,6 +456,9 @@ namespace ft
 						first = erase(first);
 				}
 
+				/*
+					swap the the map using std::swap
+				*/
 				void swap(rtree& node)
 				{
 					std::swap(_nil, node._nil);
@@ -447,11 +469,110 @@ namespace ft
 					std::swap(_size, node._size);
 				}
 
+				// clear the map with the default constructor which set it to empty;
 				void clear (void)
 				{
 					rbtree tmp(_comp, _alloc);
 					swap(tmp);
 				}
+			/********************** OPERATIONS *********************************/
+
+				//finds the element based on the key using find_internal
+				iterator find(const key_type& key)
+				{
+					return (iterator(find_internal(key), _nil));
+				}
+
+				const_iterator find(const key_type& key) const
+				{
+					return (const_iterator(find_internal(key), _nil));
+				}
+
+				// returns the lower first iterator from the key	
+				iterator lower_bound(const key_type& key)
+				{
+					return (iterator(lower_bound_internal(key), _nil));
+				}
+
+				const_iterator lower_bound(const key_type& key) const
+				{
+					return (const_iterator(lower_bound_internal(key), _nil));
+				}
+				
+				// returns the first higher iterator from the key
+				iterator upper_bound(const key_type& key)
+				{
+					return (iterator(upper_bound_internal(key), _nil));
+				}
+
+				const_iterator upper_bound(const key_type& key) const
+				{
+					return (const_iterator(upper_bound_internal(key), _nil));
+				}
+
+				ft::pair<const_iterator, const_iterator> equal_range(const key_type& key) const
+				{
+					return (equal_range_internal(key));
+				}
+
+				ft::pair<iterator, iterator> equal_range(const key_type& key)
+				{
+					return (equal_range_internal(key));
+				}
+
+			/********************** ALLOCATOR *********************************/
+
+				allocator_type get_allocator() const
+				{
+					return (_alloc);
+				}
+			
+			private:
+				// get the root which is _end->_left
+				node_pointer get_root() const
+				{
+					return (_end->_left);
+				}
+
+				// set the ptr to root by changing the ptr parent to end
+				// and assign the ptr to the end->left
+				void set_root(const node_pointer ptr)
+				{
+					ptr->_parent = _end;
+					_end->_left = ptr;
+				}
+				
+				// create a single node first allocate and construct using allocate member functions
+				node_pointer create_node(const value_type& value)
+				{
+					node_pointer ptr = _alloc.allocate(1);
+
+					_alloc.construct(ptr, value);
+					ptr->_parent = _nil;
+					ptr->_left = _nil;
+					ptr->_right = _nil;
+					ptr->_is_black = false;
+					return (ptr);
+				}
+
+				// delete a single node by using destroy and deallocate member functions
+			
+				void delete_node(node_pointer ptr)
+				{
+					_alloc.destroy(ptr);
+					_alloc.deallocate(ptr, 1);
+				}
+
+				// delete multiple nodes recursively until the ptr equals to NIL
+				void delete_node_recursive(node_pointer ptr)
+				{
+					if (ptr == _nil)
+						return ;
+					delete_node_recursive(ptr->_left);
+					delete_node_recursive(ptr->_right);
+					delete_node(ptr);
+				}
+
 		}
 }
 #endif
