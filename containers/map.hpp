@@ -3,10 +3,25 @@
 
 #include <memory>
 #include <functional>
-#include "utils/pair.hpp"
-#include "utils/equal.hpp"
-#include "utils/lexicographical_compare.hpp"
-#include "utils/reverse_iterator.hpp"
+#include "../utils/pair.hpp"
+#include "../utils/equal.hpp"
+#include "../utils/lexicographical_compare.hpp"
+#include "../utils/reverse_iterator.hpp"
+
+/*
+	binary search tree also called an ordered or sorted binary tree, is a rooted binary tree data
+	structure with the key of each internal node being greater than all the key in the respecitve
+	node's left subtree and less than the ones in its right subtree.
+
+	a self-balancing binary search tree is a binary search tree that automatically keeps its heihtt as 
+	samll as possible (o(log n)) in the face of arbitrary item insertions and deletions.
+
+	there are many diffeneent types of self-baloancing BST (AVL trees, red-black trees splay tree, etc)
+
+	maps are usually implemented using red black tree, read-black tree is a speciallized search
+	tree data structure noted for fast storage and retireval of oredred information and guarantee
+	that operations with complete within a known time.
+*/
 
 namespace ft
 {

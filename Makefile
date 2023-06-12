@@ -1,7 +1,7 @@
 CPP = c++
-STDFILE = std_main.cpp
-FTFILE = ft_main.cpp
-TEST = test_main.cpp
+STDFILE = test/std_main.cpp
+FTFILE = test/ft_main.cpp
+TEST = test/test_main.cpp
 STDNAME = std_vector
 FTNAME = ft_vector
 TNAME = t_vector

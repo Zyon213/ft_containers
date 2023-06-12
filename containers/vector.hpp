@@ -8,11 +8,11 @@
 	destructed), and <iostream> behaves as if it defines std::ios_base::Init with
 	storage duration. 
 */
-#include "utils/is_integral.hpp"
-#include "utils/vector_iterator.hpp"
-#include "utils/reverse_iterator.hpp"
-#include "utils/lexicographical_compare.hpp"
-#include "utils/swap.hpp"
+#include "../utils/is_integral.hpp"
+#include "../utils/vector_iterator.hpp"
+#include "../utils/reverse_iterator.hpp"
+#include "../utils/lexicographical_compare.hpp"
+#include "../utils/swap.hpp"
 #include <iostream>
 /* 
 	memory header is part of the dynamic memory management library
