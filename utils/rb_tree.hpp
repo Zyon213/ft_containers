@@ -944,6 +944,54 @@ namespace ft
 					}
 					return tmp;
 				}
+
+				ft::pair<iterator, iterator> equal_range_internal(const key_type& value)
+				{
+					node_pointer ptr = get_root();
+					node_pointer tmp = _end;
+
+					while (ptr != _nil)
+					{
+						if (_comp(value, ptr->_value))
+						{
+							tmp = ptr;
+							ptr = ptr->_left;
+						}
+						else if(_comp(ptr->_value, value))
+							ptr = ptr->_right;
+						else
+						{
+							if (ptr->_right != _nil)
+								tmp = get_min_node(ptr->_right, _nil);
+							return (ft::make_pair(iterator(ptr, _nil), iterator(tmp, _nil)));
+						}
+					}
+					return (ft::make_pair(iterator(tmp, _nil), iterator(tmp, _nil)));
+				}
+
+				ft::pair<const_iterator, const_iterator> equal_range_internal(const key_type& value) const
+				{
+					node_pointer ptr = get_root();
+					node_pointer tmp = _end;
+
+					while (ptr != _nil)
+					{
+						if (_comp(value, ptr->_value))
+						{
+							tmp = ptr;
+							ptr = ptr->_left;
+						}
+						else if(_comp(ptr->_value, value))
+							ptr = ptr->_right;
+						else
+						{
+							if (ptr->_right != _nil)
+								tmp = get_min_node(ptr->_right, _nil);
+							return (ft::make_pair(const_iterator(ptr, _nil), const_iterator(tmp, _nil)));
+						}
+					}
+					return (ft::make_pair(const_iterator(tmp, _nil), const_iterator(tmp, _nil)));
+				}
 		};
 }
 
