@@ -7,6 +7,7 @@
 #include "../utils/equal.hpp"
 #include "../utils/lexicographical_compare.hpp"
 #include "../utils/reverse_iterator.hpp"
+#include "../utils/rb_tree.hpp"
 
 /*
 	binary search tree also called an ordered or sorted binary tree, is a rooted binary tree data
@@ -47,8 +48,8 @@ namespace ft
 			typedef typename type_traits::const_pointer 												const_pointer;
 			typedef size_t																				size_type;
 			typedef	std::ptrdiff_t 																		difference_type;
-			typedef typename ft::rbtree<value_type, value_compare, allocator_type>::iterator    		iterator;
-			typedef typename ft::rbtree<value_type, value_compare, allocator_type>::const_iterator    	const_iterator;
+			typedef typename ft::rbtree<value_type, key_type, value_compare, allocator_type>::iterator    		iterator;
+			typedef typename ft::rbtree<value_type, key_type, value_compare, allocator_type>::const_iterator    	const_iterator;
 			typedef ft::reverse_iterator<iterator>														reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>												const_reverse_iterator;
 

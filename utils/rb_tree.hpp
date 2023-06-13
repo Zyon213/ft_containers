@@ -27,7 +27,7 @@ namespace ft
 
 	template<typename T>
 	struct TreeNode {
-		typedef 			T value_type;
+		typedef T			value_type;
 
 		TreeNode*			_parent;
 		TreeNode*			_left;
@@ -35,7 +35,7 @@ namespace ft
 		value_type  		_value;
 		bool				_is_black;
 
-		TreeNode() : _parent(ft::NIL), _left(ft::NIL), _right(ft::NIL), _value(value_type), _is_black(bool()) {}
+		TreeNode() : _parent(ft::NIL), _left(ft::NIL), _right(ft::NIL), _value(value_type()), _is_black(bool()) {}
 		TreeNode(value_type& value) : _parent(ft::NIL), _left(ft::NIL), _right(ft::NIL), _value(value), _is_black(bool()) {}
 		TreeNode(TreeNode& node) : _parent(node._parent), _left(node._left), _right(node._right), _value(node._value), _is_black(node._is_black) {}
 		~TreeNode() {}
@@ -123,7 +123,7 @@ namespace ft
 		return (!comp(u, v) && (!comp(v, u)));
 	}
 
-	template <typename U, typename U>
+	template <typename U, typename V>
 	class tree_iterator
 	{
 		public:
@@ -174,7 +174,7 @@ namespace ft
 
 			tree_iterator operator++()
 			{
-				_current = get_next_node(_current, _nil)
+				_current = get_next_node(_current, _nil);
 				return (*this);
 			}
 
@@ -187,11 +187,11 @@ namespace ft
 
 			tree_iterator operator--()
 			{
-				_current = get_prev_node(_current, _nil)
+				_current = get_prev_node(_current, _nil);
 				return (*this);
 			}
 
-			tree_iterator operator++(int)
+			tree_iterator operator--(int)
 			{
 				tree_iterator tmp(*this);
 				--(*this);
@@ -459,7 +459,7 @@ namespace ft
 				/*
 					swap the the map using std::swap
 				*/
-				void swap(rtree& node)
+				void swap(rbtree& node)
 				{
 					std::swap(_nil, node._nil);
 					std::swap(_begin, node._begin);
