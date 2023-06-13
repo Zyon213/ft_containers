@@ -66,13 +66,13 @@ namespace ft
 	}
 
 	template <typename P>
-	bool is_black(const P& p)
+	bool is_black_color(const P& p)
 	{
 		return (p->_is_black);
 	}
 
 	template <typename P>
-	bool is_red(const P& p)
+	bool is_red_color(const P& p)
 	{ 
 		return (!(p->_is_black));
 	}
@@ -573,6 +573,165 @@ namespace ft
 					delete_node(ptr);
 				}
 
-		}
+				// searches for the parent of the given value
+
+				node_pointer search_parent(const value_type& value, node_pointer position = ft::NIL)
+				{
+					if (position && position != _end)
+					{
+						// if the right value is nil parent value is begin
+						if (_comp(value, position->_value) && position->_left == _nil)
+						{
+							iterator prev = iterator(position, _nil);
+							if (prev == begin() || _comp(*--prev, value))
+								return (position);
+						}
+						// if the left value is nil parent value is end
+						else if (position->_right == _nil)
+						{
+							iterator next = iterator(position, _nil)
+							if (next == end() || _comp(value, *++next))
+								return (postion);
+						}
+					}
+					node_pointer cur = get_root();
+					node_pointer tmp = _end;
+					/* 				
+						if it is not begin or end it search the element, if it is less
+						it is less return cur->left else it is the right, if nothing match
+						return the value;
+					 */
+					for (; cur != _nil;)
+					{
+						tmp = cur;
+						if (_comp(value, cur->value))
+							cur = cur->_left;
+						else if (_comp(cur->_value, value))
+							cur = cur->_right;
+						else
+							return (cur);
+					}
+					return (tmp);
+				}
+
+				// insert a node inside the tree
+
+				node_pointer insert_internal(const value_type& value, node_pointer parent)
+				{
+					// creates a single node;
+					node_pointer ptr = create_node(value);
+
+					// if the parent is end set the new node root;
+					if (parent == _end)
+						set_root(ptr);
+					// else if value is less thatn parent value assign the new node as left node
+					else if (_comp(value, parent->_value))
+						parent->_left = ptr;
+					// else  assign the new node as right node
+					else
+						parent->_right = ptr;
+					
+					ptr->_parent = parent;
+					insert_fixup(ptr);
+					insert_update(ptr);
+					return (ptr);
+				}
+
+				// fixes the tree after inserting a node so the tree will be balanced
+
+				void insert_fixup(node_pointer ptr)
+				{
+					while (is_red_color(ptr->_parent))
+					{
+						if (is_left_child(ptr->_parent))
+							insert_fixup_left(ptr);
+						else
+							insert_fixup_right(ptr);
+					}
+					get_root()->_is_black = true;
+				}
+
+				// fix the left child
+
+				void insert_fixup_left(node_pointer& ptr)
+				{
+					node_pointer uncle = ptr->_parent->_parent->_right;
+
+					if (is_red_color(uncle))
+					{
+						ptr->_parent->_is_black = true;
+						uncle->_is_black = true;
+						uncle->_parent->_is_black = false;
+						ptr = uncle->_parent;
+					}
+					else
+					{
+						if (is_right_child(ptr))
+						{
+							ptr = ptr->_parent;
+							rotate_left(ptr);
+						}
+						ptr->_parent->_is_black = true;
+						ptr->_parent->_parent->_is_black = false;
+						rotate_right(ptr->_parent->_parent);
+					}
+				}
+				// fix the right child
+
+				void insert_fixup_right(node_pointer& ptr)
+				{
+					node_pointer uncle = ptr->_parent->_parent->_left;
+
+					if (is_red_color(uncle))
+					{
+						ptr->_parent->_is_black = true;
+						uncle->_is_black = true;
+						uncle->_parent->_is_black = false;
+						ptr = uncle->_parent;
+					}
+					else
+					{
+						if (is_left_child(ptr))
+						{
+							ptr = ptr->_parent;
+							rotate_right(ptr);
+						}
+						ptr->_parent->_is_black = true;
+						ptr->_parent->_parent->_is_black = false;
+						rotate_left(ptr->_parent->_parent);
+					}
+				}
+
+				// update size and the begining after inserting a node
+
+				void insert_update(const node_pointer ptr)
+				{
+					if (_begin == _end || _comp(ptr->_value, _begin->_value))
+						_begin = ptr;
+					_size++;
+				}
+
+				// remove a node from the tree
+
+				void remove_internal(node_pointer ptr)
+				{
+					node_pointer recolor_node;
+					node_pointer fixup_node = ptr;
+					bool original_color = is_black_color(ptr);
+
+					if (ptr->_left == _nil)
+					{
+						recolor_node = ptr->_right;
+						transplant(ptr, ptr->_right);
+					}
+					else if (ptr->_right == _nil)
+					{
+						recolor_node = ptr->_left;
+						transplant(ptr, ptr->_left);
+					}
+
+				}
+		};
 }
+
 #endif
