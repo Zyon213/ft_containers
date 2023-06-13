@@ -729,7 +729,220 @@ namespace ft
 						recolor_node = ptr->_left;
 						transplant(ptr, ptr->_left);
 					}
+					else
+					{
+						fixup_node = get_min_node(ptr->_right, _nil);
+						original_color = is_black_color(fixup_node);
+						recolor_node = fixup_node->_right;
+						if (fixup_node->_parent == ptr)
+							recolor_node->_parent = fixup_node;
+						else
+						{
+							transplant(fixup_node, fixup_node->_right);
+							fixup_node->_right = ptr->_right;
+							fixup_node->_right->_parent = fixup_node;
+						}
+						transplant(ptr, fixup_node);
+						fixup_node->_left = ptr->_left;
+						fixup_node->_left->_parent = fixup_node;
+						fixup_node->_is_black = is_black_color(ptr);
+					}
+					if (original_color)
+						remove_fixup(recolor_node);
+				}
 
+				// update the tree after removing a node
+				void remove_fixup(node_pointer ptr)
+				{
+					while ( ptr != get_root() && is_black_color(ptr))
+					{
+						if (is_left_child(ptr))
+							remove_fixup_left(ptr);
+						else
+							remove_fixup_right(ptr)
+					}
+					ptr->_is_black = true;
+				}
+
+				// remove node from the left side
+
+				void remove_fixup_left(node_pointer& ptr)
+				{
+					node_pointer sibling = ptr->_parent->_right;
+
+					if (is_red_color(sibling))
+					{
+						sibling->_is_black = true;
+						ptr->_parent->_is_black = false;
+						rotate_left(ptr->_parent);
+						sibling = ptr->_parent->_right;
+					}
+					if (is_black_color(sibling->_left) && is_black_color(sibling->_right))
+					{
+						sibling->_is_black = false;
+						ptr = ptr->_parent;
+					}
+					else if (is_black_color(sibling->_right))
+					{
+						sibling->_left->_is_black = true;
+						sibling->_is_black = false;
+						rotate_right(sibling);
+						sibling = ptr->_parent->_right;
+					}
+					if (is_red_color(sibling->_right))
+					{
+						sibling->_is_black = is_black_color(ptr->_parent);
+						ptr->_parent->_is_black = true;
+						sibling->_right->_is_black = true;
+						rotate_left(ptr->_parent);
+						ptr = get_root();
+					}
+				}
+				// remove node from the right side
+
+				void remove_fixup_right(node_pointer& ptr)
+				{
+					node_pointer sibling = ptr->_parent->_left;
+
+					if (is_red_color(sibling))
+					{
+						sibling->_is_black = true;
+						ptr->_parent->_is_black = false;
+						rotate_right(ptr->_parent);
+						sibling = ptr->_parent->_left;
+					}
+					if (is_black_color(sibling->_right) && is_black_color(sibling->_left))
+					{
+						sibling->_is_black = false;
+						ptr = ptr->_parent;
+					}
+					else if (is_black_color(sibling->_left))
+					{
+						sibling->_right->_is_black = true;
+						sibling->_is_black = false;
+						rotate_left(sibling);
+						sibling = ptr->_parent->_left;
+					}
+					if (is_red_color(sibling->_left))
+					{
+						sibling->_is_black = is_black_color(ptr->_parent);
+						ptr->_parent->_is_black = true;
+						sibling->_left->_is_black = true;
+						rotate_right(ptr->_parent);
+						ptr = get_root();
+					}
+				}
+
+				void transplant (node_pointer former, node_pointer later)
+				{
+					if (former->_parent == _end)
+						set_root(later);
+					else if(is_left_child(former))
+						former->_parent->_left = later;
+					else
+						former->_parent->_right = later;
+					later->_parent = former->_parent;
+				}
+
+				// rotate nodes to the left to balance the tree
+
+				void rotate_left(node_pointer ptr)
+				{
+					node_pointer child = ptr->_right;
+
+					ptr->_right = child->_left;
+					if (ptr->_right != _nil)
+						ptr->_right->_parent = ptr;
+					
+					node_pointer parent = ptr->_parent;
+					child->_parent = parent;
+					if (parent == _end)
+						set_root(child);
+					else if (is_left_child(ptr))
+						parent->_left = child;
+					else
+						parent->_right = child;
+					child->_left = ptr;
+					ptr->_parent = child;
+				}
+				// rotate nodes to the right to balance the tree
+
+				void rotate_right(node_pointer ptr)
+				{
+					node_pointer child = ptr->_left;
+
+					ptr->_left = child->_right;
+					if (ptr->_left != _nil)
+						ptr->_left->_parent = ptr;
+					
+					node_pointer parent = ptr->_parent;
+					child->_parent = parent;
+					if (parent == _end)
+						set_root(child);
+					else if (is_left_child(ptr))
+						parent->_left = child;
+					else
+						parent->_right = child;
+					child->_right = ptr;
+					ptr->_parent = child;
+				}
+
+				// find first node of the tree
+
+				node_pointer find_internal(const key_type& value) const
+				{
+					node_pointer ptr = get_root();
+
+					while (ptr != _nil)
+					{
+						if (_comp(value, ptr->_value))
+							ptr = ptr->_left;
+						else if (_comp(ptr->_value, value))
+							ptr = ptr->_right;
+						else
+							return ptr;
+					}
+					return _end;
+				}
+
+				// find the first lower key from the given key
+
+				node_pointer lower_bound_internal(const key_type& key) const
+				{
+					node_pointer ptr = get_root();
+					node_pointer tmp = _end;
+
+					while (ptr != _nil)
+					{
+						if (!_comp(ptr->_value, key))
+						{
+							tmp = ptr;
+							ptr = ptr->_left;
+						}
+						else
+							ptr = ptr->_right;
+					}
+					return tmp;
+				}
+
+				// find the first higher key from the given key
+
+				node_pointer upper_bound_internal(const key_type& key) const
+				{
+					node_pointer ptr = get_root();
+					node_pointer tmp = _end;
+
+					while (ptr != _nil)
+					{
+						if (_comp(key, ptr->_value))
+						{
+							tmp = ptr;
+							ptr = ptr->_left;
+						}
+						else
+							ptr = ptr->_right;
+					}
+					return tmp;
 				}
 		};
 }
