@@ -1,5 +1,6 @@
 #ifndef PAIR_HPP
 #define PAIR_HPP
+#include <iostream>
 
 namespace ft
 {
@@ -13,8 +14,9 @@ namespace ft
 		T2 second;
 
 		pair(void) : first(T1()), second(T2()) {}
-		template<class U, class V> pair(const pair<U, V>& pr) : first(pr.first) , second(pr.second) {}
-		pair (const first_type& a, const second_type& b) : first(a), second(b) {}
+		pair (const T1& a, const T2& b) : first(a), second(b) {}
+		template<class U, class V> 
+		pair(const pair<U, V>& pr) : first(pr.first) , second(pr.second) {}
 
 		pair& operator=(const pair& pr)
 		{

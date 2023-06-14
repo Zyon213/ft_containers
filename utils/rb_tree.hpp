@@ -1,7 +1,6 @@
 #ifndef RB_TREE_HPP
 #define RB_TREE_HPP
 #include "pair.hpp"
-#include <iostream>
 
 namespace ft
 {
@@ -36,8 +35,8 @@ namespace ft
 		bool				_is_black;
 
 		TreeNode() : _parent(ft::NIL), _left(ft::NIL), _right(ft::NIL), _value(value_type()), _is_black(bool()) {}
-		TreeNode(value_type& value) : _parent(ft::NIL), _left(ft::NIL), _right(ft::NIL), _value(value), _is_black(bool()) {}
-		TreeNode(TreeNode& node) : _parent(node._parent), _left(node._left), _right(node._right), _value(node._value), _is_black(node._is_black) {}
+		TreeNode(const value_type& value) : _parent(ft::NIL), _left(ft::NIL), _right(ft::NIL), _value(value), _is_black(bool()) {}
+		TreeNode(const TreeNode& node) : _parent(node._parent), _left(node._left), _right(node._right), _value(node._value), _is_black(node._is_black) {}
 		~TreeNode() {}
 
 		TreeNode& operator=( const TreeNode& node) {
@@ -149,7 +148,7 @@ namespace ft
 
 			tree_iterator& operator=(const tree_iterator& node)
 			{
-				if (this != node)
+				if (this != &node)
 				{
 					_current = node._current;
 					_nil = node._nil;
@@ -280,7 +279,6 @@ namespace ft
 				node_pointer 			_nil;
 				node_pointer 			_begin;
 				node_pointer 			_end;
-				node_pointer 			_comp;
 				compare_type 			_comp;
 				node_allocator  		_alloc;
 				size_type 				_size;
@@ -298,13 +296,12 @@ namespace ft
 					_nil->_parent = _nil;
 					_nil->_left = _nil;
 					_nil->_right = _nil;
-					_end = creae_node(value_type());
+					_end = create_node(value_type());
 					_end->_is_black = true;
 					_begin = _end;
 				}
 			
 			// Default copy constructor
-			public:
 				rbtree(const rbtree& node) : _comp(node._comp), _alloc(node._alloc), _size(size_type())
 				{
 					_nil = _alloc.allocate(1);
@@ -313,7 +310,7 @@ namespace ft
 					_nil->_parent = _nil;
 					_nil->_left = _nil;
 					_nil->_right = _nil;
-					_end = creae_node(value_type());
+					_end = create_node(value_type());
 					_end->_is_black = true;
 					_begin = _end;
 					insert(node.begin(), node.end());
@@ -391,25 +388,24 @@ namespace ft
 				{
 					node_pointer ptr = search_parent(value);
 
-					if (ptr != _end && is_equal(ptr->_value, value, _comp));
+					if (ptr != _end && is_equal(ptr->_value, value, _comp))
 						return (ft::make_pair(iterator(ptr, _nil), false));
-					return (ft::make_pair(iterator(insert_internal(value , ptr), true)));
-				}
+					return (ft::make_pair(iterator(insert_internal(value , ptr),_nil), true));
+					}
+					iterator insert(iterator position, const value_type& value)
+					{
+						node_pointer ptr = search_parent(value, position.base());
 
-				iterator insert(iterator position, const value_type& value)
-				{
-					node_pointer ptr = search_parent(value, position.base());
-
-					if (ptr != _end && is_equal(ptr->_value, value, _comp));
-						return (iterator(ptr, _nil));
-					return (iterator(insert_internal(value , ptr), _nil));
+						if (ptr != _end && is_equal(ptr->_value, value, _comp))
+							return (iterator(ptr, _nil));
+						return (iterator(insert_internal(value , ptr), _nil));
 				}
 
 				template <class InputIterator>
 				void insert(InputIterator first, InputIterator last)
 				{
 					for (; first != last; first++)
-						insert(*first)
+						insert(*first);
 				}
 
 				/*
@@ -422,7 +418,7 @@ namespace ft
 					if (_size == 0)
 						return (iterator(_nil, _nil));
 					
-					iterator tmp(position)
+					iterator tmp(position);
 					++tmp;
 					if (position == begin())
 						_begin = tmp.base();
@@ -589,9 +585,9 @@ namespace ft
 						// if the left value is nil parent value is end
 						else if (position->_right == _nil)
 						{
-							iterator next = iterator(position, _nil)
+							iterator next = iterator(position, _nil);
 							if (next == end() || _comp(value, *++next))
-								return (postion);
+								return (position);
 						}
 					}
 					node_pointer cur = get_root();
@@ -604,7 +600,7 @@ namespace ft
 					for (; cur != _nil;)
 					{
 						tmp = cur;
-						if (_comp(value, cur->value))
+						if (_comp(value, cur->_value))
 							cur = cur->_left;
 						else if (_comp(cur->_value, value))
 							cur = cur->_right;
@@ -759,7 +755,7 @@ namespace ft
 						if (is_left_child(ptr))
 							remove_fixup_left(ptr);
 						else
-							remove_fixup_right(ptr)
+							remove_fixup_right(ptr);
 					}
 					ptr->_is_black = true;
 				}
