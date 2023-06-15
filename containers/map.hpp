@@ -62,6 +62,16 @@ namespace ft
 					{
 						return (comp(x.first, y.first));
 					}
+
+					bool operator()(const value_type& x, const key_type& y) const
+					{
+						return (comp(x.first, y));
+					}
+
+					bool operator()(const key_type& x, const value_type& y) const
+					{
+						return (comp(x, y.first));
+					}
 			};
 
 			typedef typename ft::rbtree<value_type, key_type, value_compare, allocator_type>::iterator    		iterator;
@@ -235,11 +245,11 @@ namespace ft
 			// return bound of range elements which have a key equivalent to k
 
 			ft::pair<const_iterator, const_iterator> equal_range ( const key_type& k) const {
-				return (_tree.equl_range(k));
+				return (_tree.equal_range(k));
 			}
 
 			ft::pair<iterator, iterator> equal_range ( const key_type& k) {
-				return (_tree.equl_range(k));
+				return (_tree.equal_range(k));
 			}
 
 			/********************** ALLOCATOR *********************************/

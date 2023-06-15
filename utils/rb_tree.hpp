@@ -910,7 +910,7 @@ namespace ft
 
 					while (ptr != _nil)
 					{
-						if (!_comp(ptr->_value, key))
+						if (!(_comp(ptr->_value, key)))
 						{
 							tmp = ptr;
 							ptr = ptr->_left;
