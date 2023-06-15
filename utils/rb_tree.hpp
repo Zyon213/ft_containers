@@ -171,7 +171,7 @@ namespace ft
 				return (_current->_value);
 			}
 
-			tree_iterator operator++()
+			tree_iterator& operator++()
 			{
 				_current = get_next_node(_current, _nil);
 				return (*this);
@@ -184,7 +184,7 @@ namespace ft
 				return (tmp);
 			}
 
-			tree_iterator operator--()
+			tree_iterator& operator--()
 			{
 				_current = get_prev_node(_current, _nil);
 				return (*this);
