@@ -1,6 +1,10 @@
 #include <iostream>
-#include <map>
+#include <ctime>
+#include <iomanip>
+#include <vector>
+#include <climits>
 #include "containers/map.hpp"
+
 
 template <typename U, typename T>
 void view_map(ft::map<U, T> map1)
@@ -59,6 +63,14 @@ struct buf
 	std::string name;
 };
 
+template<typename T>
+void exec_time(T t2, T t1)
+{
+	double t = static_cast<double>(t2 - t1) / static_cast<double>(CLOCKS_PER_SEC);
+	// double t = t2 - t1;
+	std::cout << "Execution time is " << std::setprecision(8) << t << std::endl;
+}
+
 int main()
 {
 	{
@@ -71,6 +83,7 @@ int main()
 		map1['e'] = 5;
 		map1['c'] = 3;
 		view_map(map1);
+
 
 		std::cout << "Copy constructor " << std::endl;
 		ft::map<char, int> map2(map1);
@@ -97,9 +110,7 @@ int main()
 
 		std::cout << "Overload operator " << std::endl;
 		std::cout << map5;
-
 		ft::map<int, buf> map6;
-
 		buf b1 =  {43, "add"};
 		map6[1] = b1;
 		buf b2 = {12, "minus"};
@@ -124,13 +135,22 @@ int main()
 		map7[3] = t2;
 		test t3(4, "ten");
 		map7[4] = t3;
-
-		std::cout << map7[1].getName();
-
 		ft::map<int, test>::iterator it1;
 		for (it1 = map7.begin(); it1 != map7.end(); ++it1)
 			std::cout << "[" << it1->first << " ] -> " << it1->second.getNum() << " " << it1->second.getName() << std::endl;
 
+		std::cout << "Initializing using large elements " << std::endl;
+		std::vector<int> vec;
+		std::vector<int>::iterator vit;
+		for (int i = 0; i < INT_MAX / 100; i++)
+			vec.push_back(i);
+		
+		std::clock_t tm1 = clock();
+		ft::map<int, int> map8;
+		for (vit = vec.begin(); vit != vec.end(); ++vit)
+			map8.insert(ft::pair<int, int>(*vit, *vit));
+		std::clock_t tm2 = clock();
+		exec_time(tm2, tm1);
 	}
 	return (0);
 }
