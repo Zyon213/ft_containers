@@ -63,6 +63,10 @@
 		"memory_resource": "cpp",
 		"__functional_03": "cpp",
 		"deque": "cpp",
-		"list": "cpp"
+		"list": "cpp",
+		"__tree": "cpp",
+		"iomanip": "cpp",
+		"map": "cpp",
+		"stack": "cpp"
 	}
 }
