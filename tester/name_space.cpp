@@ -3,12 +3,13 @@
 #include <cstdlib>
 #include <climits>
 #include <time.h>
+#include <iomanip>
 #include <map>
 #include <chrono>
 #include "../containers/map.hpp"
 #include "../containers/vector.hpp"
 
-class Timer
+/* class Timer
 {
 	private:
 		std::chrono::time_point<std::chrono::high_resolution_clock> _start;
@@ -29,9 +30,34 @@ class Timer
 			_end = std::chrono::high_resolution_clock::now();
 			auto start_t = std::chrono::time_point_cast<std::chrono::microseconds>(_start).time_since_epoch().count();
 			auto end_t = std::chrono::time_point_cast<std::chrono::microseconds>(_end).time_since_epoch().count();
-			auto duration = end_t - start_t;
+			double duration = end_t - start_t;
 			double ms =  duration * 0.001;
 			std::cout << "execution time is " << ms << " ms" << std::endl;
+		}
+}; */
+
+class Timer
+{
+	private:
+		std::clock_t _start;
+		std::clock_t _end;
+	public:
+		Timer()
+		{
+			_start = clock();
+		}
+
+		~Timer()
+		{
+			stop();
+		}
+
+		void stop()
+		{
+			_end = clock();
+
+			double duration = static_cast<double>(_end - _start) / static_cast<double>(CLOCKS_PER_SEC);
+			std::cout << "execution time is " << std::setprecision(8) << duration << " ms" << std::endl;
 		}
 };
 
