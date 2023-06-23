@@ -2,20 +2,23 @@ CPP = c++
 FMNAME = ft_map
 SMNAME = std_map
 TCMP = exec_time
-FMFILE = test/ft_map_main.cpp
-SMFILE = test/std_map_main.cpp
-STDFILE = test/std_main.cpp
-FTFILE = test/ft_main.cpp
-TEST = test/test_main.cpp
+MAIN = test
 STDNAME = std_vector
 FTNAME = ft_vector
 TNAME = t_vector
+FMFILE = tester/ft_map_main.cpp
+SMFILE = tester/std_map_main.cpp
+STDFILE = tester/std_main.cpp
+FTFILE = tester/ft_main.cpp
+TEST = tester/test_main.cpp
+FFILE = tester/main.cpp
 FTTXT = ft_vector.txt
 STDTXT = std_vector.txt
 FMAP = ft_map.txt
 SMAP = std_map.txt
-EXET = map_main.cpp
-FLAG11 = -Wall -Wextra -Werror -std=c++98
+EXET = tester/map_main.cpp
+FLAG = -Wall -Wextra -Werror -std=c++98
+FLAG11 = -Wall -Wextra -Werror -std=c++11
 DF = diff
 RM = rm -f
 
@@ -30,13 +33,15 @@ svec:
 test:
 	$(CPP) $(FLAG) $(TEST) -o $(TNAME)
 exet:
-	$(CPP) $(FLAG) $(EXET) -o $(TCMP)
+	$(CPP) $(FLAG11) $(EXET) -o $(TCMP)
+main:
+	$(CPP) $(FLAG) $(FFILE) -o $(MAIN)
 
 all: fvec svec smap fmap
 cmp_vec: fvec svec
 	@ ./$(FTNAME) > $(FTTXT)
 	@ ./$(STDNAME) > $(STDTXT)
-	@ $(DF) $(FTTXT) $(STDTXT)
+	@ $(DF) $(FTTXT) $(STDTXT) && echo "SUCCES" || "FAIL"
 
 cmp_map: fmap smap
 	@ ./$(FMNAME) > $(FMAP)
@@ -55,6 +60,7 @@ clean:
 	$(RM) $(SMAP)
 	$(RM) $(FMAP)
 	$(RM) $(TCMP)
+	$(RM) $(MAIN)
 leakvec:
 	valgrind --leak-check=full -s ./$(FTNAME)
 leakmap:

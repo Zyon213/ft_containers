@@ -162,8 +162,8 @@ void access_vector()
 	std::array<int, 7> myarr = {3, 44, 5, 32, 87, 23, 98};
 	ft::vector<int> vec(myarr.begin(), myarr.end());
 	std::cout << "************Access element using [] operator***********" << std::endl;
-	// std::cout << "The fifth index element is: " << vec[5] << std::endl;
-	// std::cout << "The tenth index element is: " << vec[10] << std::endl;
+	std::cout << "The fifth index element is: " << vec[5] << std::endl;
+	std::cout << "The tenth index element is: " << vec[10] << std::endl;
 	std::cout << "************Access element using at ***********" << std::endl;
 	try
 	{
