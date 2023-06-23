@@ -3,6 +3,7 @@ FMNAME = ft_map
 SMNAME = std_map
 TCMP = exec_time
 MAIN = test
+TIME = time
 STDNAME = std_vector
 FTNAME = ft_vector
 TNAME = t_vector
@@ -12,6 +13,7 @@ STDFILE = tester/std_main.cpp
 FTFILE = tester/ft_main.cpp
 TEST = tester/test_main.cpp
 FFILE = tester/main.cpp
+TFILE = tester/time_test.cpp
 FTTXT = ft_vector.txt
 STDTXT = std_vector.txt
 FMAP = ft_map.txt
@@ -21,7 +23,16 @@ FLAG = -Wall -Wextra -Werror -std=c++98
 FLAG11 = -Wall -Wextra -Werror -std=c++11
 DF = diff
 RM = rm -f
+NS_FT = -D NAMESPACE=ft
+NS_STD = -D NAMESPACE=std
+TS = tester/name_space.cpp
+NSTD = nstd
+NFT = nft
 
+ft :
+	$(CPP) $(FLAG11) $(NS_FT) $(TS) -o $(NFT)
+std :
+	$(CPP) $(FLAG11) $(NS_STD) $(TS) -o $(NSTD)
 fmap: 
 	$(CPP) $(FLAG) $(FMFILE) -o $(FMNAME)
 smap:
@@ -36,6 +47,8 @@ exet:
 	$(CPP) $(FLAG11) $(EXET) -o $(TCMP)
 main:
 	$(CPP) $(FLAG) $(FFILE) -o $(MAIN)
+time: $(TFILE)
+	$(CPP) $(FLAG11) $(TFILE) -o $(TIME)
 
 all: fvec svec smap fmap
 cmp_vec: fvec svec
@@ -61,6 +74,9 @@ clean:
 	$(RM) $(FMAP)
 	$(RM) $(TCMP)
 	$(RM) $(MAIN)
+	$(RM) $(TIME)
+	$(RM) $(NSTD)
+	$(RM) $(NFT)
 leakvec:
 	valgrind --leak-check=full -s ./$(FTNAME)
 leakmap:
