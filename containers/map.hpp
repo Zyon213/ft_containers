@@ -295,7 +295,7 @@ bool operator>=(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compar
 }
 
 template <class Key, class T, class Compare, class Alloc>
-void swap(const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs)
+void swap(map<Key, T, Compare, Alloc>& lhs, map<Key, T, Compare, Alloc>& rhs)
 {
 	lhs.swap(rhs);
 }
