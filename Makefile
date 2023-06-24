@@ -1,86 +1,54 @@
-CPP = c++
-FMNAME = ft_map
-SMNAME = std_map
-TCMP = exec_time
-MAIN = test
-TIME = time
-STDNAME = std_vector
-FTNAME = ft_vector
-TNAME = t_vector
-FMFILE = tester/ft_map_main.cpp
-SMFILE = tester/std_map_main.cpp
-STDFILE = tester/std_main.cpp
-FTFILE = tester/ft_main.cpp
-TEST = tester/test_main.cpp
-FFILE = tester/main.cpp
-TFILE = tester/time_test.cpp
-FTTXT = ft_vector.txt
-STDTXT = std_vector.txt
-FMAP = ft_map.txt
-SMAP = std_map.txt
-EXET = tester/map_main.cpp
-FLAG = -Wall -Wextra -Werror -std=c++98
-FLAG11 = -Wall -Wextra -Werror -std=c++11
-DF = diff
+STDNAME = std_container
+FTNAME = ft_container
+CXX = c++
+FLAG = -Wall -Werror -Wextra -std=c++98
 RM = rm -f
-NS_FT = -D NAMESPACE=ft
-NS_STD = -D NAMESPACE=std
-TS = tester/name_space.cpp
-NSTD = nstd
-NFT = nft
+DIR = tester
+STD_NS = -D NAMESPACE=std
+FT_NS = -D NAMESPACE=ft
+FILE = main.cpp
+SFILE = 
+OBJ_DIR = object
+OBJ_STD = std_object
+OBJ_FT = ft_object
 
-ft :
-	$(CPP) $(FLAG11) $(NS_FT) $(TS) -o $(NFT)
-std :
-	$(CPP) $(FLAG11) $(NS_STD) $(TS) -o $(NSTD)
-fmap: 
-	$(CPP) $(FLAG) $(FMFILE) -o $(FMNAME)
-smap:
-	$(CPP) $(FLAG) $(SMFILE) -o $(SMNAME)
-fvec:
-	$(CPP) $(FLAG) $(FTFILE) -o $(FTNAME)
-svec:
-	$(CPP) $(FLAG) $(STDFILE) -o $(STDNAME)
-test:
-	$(CPP) $(FLAG) $(TEST) -o $(TNAME)
-exet:
-	$(CPP) $(FLAG11) $(EXET) -o $(TCMP)
-main:
-	$(CPP) $(FLAG) $(FFILE) -o $(MAIN)
-time: $(TFILE)
-	$(CPP) $(FLAG11) $(TFILE) -o $(TIME)
+RED ='\033[0;31m'
+GREEN ='\033[0;32m'
+BLUE ='\033[0;34m'
+WHITE ='\033[1;37m'
 
-all: fvec svec smap fmap
-cmp_vec: fvec svec
-	@ ./$(FTNAME) > $(FTTXT)
-	@ ./$(STDNAME) > $(STDTXT)
-	@ $(DF) $(FTTXT) $(STDTXT) && echo "SUCCES" || "FAIL"
+OBJS_STD = $(addprefix $(OBJ_DIR)/$(OBJ_STD)/, $(FILE:%cpp=%o))
+OBJS_FT = $(addprefix $(OBJ_DIR)/$(OBJ_FT)/, $(FILE:%cpp=%o))
 
-cmp_map: fmap smap
-	@ ./$(FMNAME) > $(FMAP)
-	@ ./$(SMNAME) > $(SMAP)
-	@ $(DF) $(FMAP) $(SMAP) && echo "SUCCES" || echo "FAIL"
+$(OBJ_DIR)/$(OBJ_STD)/%.o : $(DIR)/$(FILE)
+	@mkdir -p $(OBJ_DIR)/$(OBJ_STD)
+	$(CXX) $(FLAG) $(STD_NS) -c $< -o $@
+	@ echo $(GREEN) "std objects file created" $(WHITE)
+
+$(OBJ_DIR)/$(OBJ_FT)/%.o : $(DIR)/$(FILE)
+	@mkdir -p $(OBJ_DIR)/$(OBJ_FT)
+	$(CXX) $(FLAG) $(FT_NS) -c $< -o $@
+	@ echo $(GREEN) "ft objects file created" $(WHITE)
+
+all: $(FTNAME) $(STDNAME)
+
+$(FTNAME): $(OBJS_FT)
+	$(CXX) $(FLAG) $(OBJ_DIR)/$(OBJ_FT)/main.o -o $(FTNAME)
+	@ echo $(BLUE) "ft container created" $(WHITE)
+
+$(STDNAME): $(OBJS_STD)
+	$(CXX) $(FLAG) $(OBJ_DIR)/$(OBJ_STD)/main.o -o $(STDNAME)
+	@ echo $(BLUE) "std container created" $(WHITE)
+
+
 clean:
-	$(RM) $(NAME)
-	$(RM) $(MNAME)
-	$(RM) $(FTNAME)
-	$(RM) $(FTTXT)
-	$(RM) $(STDNAME)
-	$(RM) $(STDTXT)
-	$(RM) $(TNAME)
-	$(RM) $(FMNAME)
-	$(RM) $(SMNAME)
-	$(RM) $(SMAP)
-	$(RM) $(FMAP)
-	$(RM) $(TCMP)
-	$(RM) $(MAIN)
-	$(RM) $(TIME)
-	$(RM) $(NSTD)
-	$(RM) $(NFT)
-leakvec:
-	valgrind --leak-check=full -s ./$(FTNAME)
-leakmap:
-	valgrind --leak-check=full -s ./$(FMNAME)
-leaktest:
-	valgrind --leak-check=full ./$(TNAME)
-.phony: clean fmap smap fvec svec test exet all cmp_vec cmp_map clean leakvec leakmap leaktest
+	$(RM) -r $(OBJ_STD) $(OBJ_FT) $(OBJ_DIR)
+	@ echo $(RED) "Object files cleaned" $(WHITE)
+
+fclean: clean
+	$(RM) $(FTNAME) $(STDNAME)
+	@ echo $(RED) "Container files cleaned" $(WHITE)
+
+re : fclean all
+
+PHONY : re fclean all std ft
