@@ -1,8 +1,8 @@
-NAME = container
+NAME = test
 CXX = c++
 FLAG = -Wall -Werror -Wextra -std=c++98
 RM = rm -f
-DIR = test
+DIR = main_dir
 SFILE = 
 OBJ_DIR = object
 OBJ = objects
